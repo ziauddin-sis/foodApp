@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:food_app/main_list.dart';
 import 'package:food_app/model/food_list.dart';
 
+// Image slider and menu list
+
 List<String> imgList = [
   'assets/1.jpg',
   'assets/2.jpg',
