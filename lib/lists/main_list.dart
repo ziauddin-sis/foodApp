@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:toast/toast.dart';
-import 'model/food_list.dart';
+import '../model/food_list.dart';
 
 class MainList extends StatefulWidget {
   @override
@@ -15,6 +15,7 @@ class _MainListState extends State<MainList> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
     foodLst = [
       FoodList(image: 'menu.jpg', name: 'Menu'),
       FoodList(image: '1.jpg', name: 'Deals'),
@@ -32,6 +33,7 @@ class _MainListState extends State<MainList> {
           margin: EdgeInsets.fromLTRB(10.0, 20.0, 10.0, 0.0),
           child: ListView.builder(
             itemCount: foodLst.length,
+            scrollDirection: Axis.vertical,
             itemBuilder: (context, index){
               return Card(
                 elevation: 5.0,
@@ -54,7 +56,14 @@ class _MainListState extends State<MainList> {
                     color: Colors.grey[500],
                   ),
                   onTap: (){
-                    myToast(foodLst[index].name);
+
+                    if (identical(foodLst[index].name, "Menu"))
+                    {
+                      Navigator.pushNamed(context, '/menu');
+                    }
+                    else{
+                      myToast('No item available for now..');
+                    }
                   },
                 ),
               );

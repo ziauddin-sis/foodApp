@@ -1,7 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:food_app/main_list.dart';
-import 'package:food_app/model/food_list.dart';
+import 'file:///E:/Flutter/food_app/lib/lists/main_list.dart';
 
 // Image slider and menu list
 
@@ -21,30 +20,10 @@ class ImageSlider extends StatefulWidget {
 
 class _ImageSliderState extends State<ImageSlider> {
   int _count = 0;
-  List<FoodList> foodLst = [];
-
-  @override
-  void initState() {
-    super.initState();
-//    foodLst = [
-//      FoodList(image: 'menu.jpg', name: 'Menu'),
-//      FoodList(image: '1.jpg', name: 'Deals'),
-//      FoodList(image: '2.jpg', name: 'Combos'),
-//      FoodList(image: '3.jpg', name: 'Promo Offers'),
-//      FoodList(image: '4.jpg', name: 'Family Bag')
-//    ];
-  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.red,
-        elevation: 0.0,
-        title: Text('Food App'),
-        centerTitle: true,
-      ),
-      body: Column(
+    return Column(
         children: <Widget>[
           CarouselSlider(
             items: imageSliders,
@@ -78,7 +57,6 @@ class _ImageSliderState extends State<ImageSlider> {
           ),
           MainList(),
         ],
-      ),
     );
   }
 
