@@ -7,12 +7,11 @@ import 'package:food_app/lists/menu-list.dart';
 void main() => runApp(MaterialApp(
   title: 'Food App',
   debugShowCheckedModeBanner: false,
-  initialRoute: '/burgerLG',
+  initialRoute: '/',
   routes: {
     '/' : (context) => MainScreen(),
     '/menu' : (context) => MenuItems(),
     '/burger': (context) => Burgers(),
-    '/burgerLG' : (context) => BurgerListGen(),
   },
 ));
 
