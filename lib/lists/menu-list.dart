@@ -29,7 +29,7 @@ class _MenuItemsState extends State<MenuItems> {
       appBar: AppBar(
         backgroundColor: Colors.red,
         elevation: 0.0,
-        title: Text('Food App'),
+        title: Text('Menu'),
         centerTitle: true,
       ),
       body: ListView.builder(

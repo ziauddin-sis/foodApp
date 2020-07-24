@@ -31,17 +31,22 @@ class _BurgersState extends State<Burgers> {
       appBar: AppBar(
         backgroundColor: Colors.red,
         elevation: 0.0,
-        title: Text('Food App'),
+        title: Text('Burgers'),
         centerTitle: true,
       ),
       body: ListView.builder(
         scrollDirection: Axis.vertical,
         itemCount: lst.length,
-//        itemExtent: 120.0,
         itemBuilder: (context, index){
           return Container(
             margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-            child: BurgerListGen(lst[index]),
+            child: InkWell(
+                child: BurgerListGen(lst[index]),
+              onTap: (){
+                Toast.show(lst[index].name, context, duration: Toast.LENGTH_LONG, gravity:  Toast.BOTTOM,
+                    backgroundColor: Colors.redAccent);
+              },
+            ),
           );
         },
       ),

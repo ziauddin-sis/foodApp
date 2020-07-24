@@ -11,7 +11,7 @@ class BurgerListGen extends StatelessWidget {
     return Container(
       child: Material(
         color: Colors.white,
-        elevation: 10,
+        elevation: 5,
         borderRadius: BorderRadius.circular(10),
         shadowColor: Colors.amberAccent[100],
         child: Padding(
