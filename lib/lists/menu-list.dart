@@ -1,4 +1,7 @@
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
+import 'package:food_app/lists/burger-list.dart';
+import 'package:food_app/model/cart_list.dart';
 import 'package:food_app/model/food_list.dart';
 
 class MenuItems extends StatefulWidget {
@@ -8,6 +11,7 @@ class MenuItems extends StatefulWidget {
 
 class _MenuItemsState extends State<MenuItems> {
 
+  CartList cart = CartList.instance;
   List<FoodList> lst = [];
 
   @override
@@ -31,6 +35,18 @@ class _MenuItemsState extends State<MenuItems> {
         elevation: 0.0,
         title: Text('Menu'),
         centerTitle: true,
+        actions: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Badge(
+              child: Icon(Icons.shopping_cart, color: Colors.white,size: 40),
+              badgeContent: Text(cart.listLength(), style: TextStyle(color: Colors.white),),
+              badgeColor: Colors.amber,
+              toAnimate: true,
+              animationType: BadgeAnimationType.fade,
+            ),
+          ),
+        ],
       ),
       body: ListView.builder(
         scrollDirection: Axis.vertical,
@@ -62,8 +78,12 @@ class _MenuItemsState extends State<MenuItems> {
                     Icons.chevron_right,
                     color: Colors.grey[500],
                   ),
-                  onTap: (){
-                    Navigator.pushNamed(context, '/burger');
+                  onTap: () async{
+                   await Navigator.push(context, MaterialPageRoute(
+                    builder: (context) => Burgers(),
+                   ));
+                   setState(() {
+                   });
                   },
                 ),
               ),
@@ -73,4 +93,10 @@ class _MenuItemsState extends State<MenuItems> {
       ),
     );
   }
+
+//  Future<bool> _onBackPressed() {
+//    Navigator.pop(context,{
+//      'length' : data['length'],
+//    });
+//  }
 }

@@ -1,6 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'file:///E:/Flutter/food_app/lib/lists/main_list.dart';
+import 'package:food_app/lists/main_list.dart';
 
 // Image slider and menu list
 
@@ -55,7 +55,7 @@ class _ImageSliderState extends State<ImageSlider> {
               );
             }).toList(),
           ),
-          MainList(),
+//          MainList(),
         ],
     );
   }
