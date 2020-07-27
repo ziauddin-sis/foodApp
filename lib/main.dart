@@ -4,6 +4,7 @@ import 'package:food_app/components/add_to_cart.dart';
 import 'package:food_app/components/image_slider.dart';
 import 'package:food_app/lists/burger-list.dart';
 import 'package:food_app/lists/menu-list.dart';
+import 'package:food_app/lists/order_list.dart';
 import 'package:food_app/model/cart_list.dart';
 import 'package:toast/toast.dart';
 import 'model/food_list.dart';
@@ -54,14 +55,21 @@ class _MainScreenState extends State<MainScreen> {
         title: Text('Food App'),
         centerTitle: true,
           actions: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Badge(
-                child: Icon(Icons.shopping_cart, color: Colors.white,size: 40),
-                badgeContent: Text(cart.listLength(), style: TextStyle(color: Colors.white),),
-                badgeColor: Colors.amber,
-                toAnimate: true,
-                animationType: BadgeAnimationType.fade,
+            InkWell(
+              onTap: (){
+                Navigator.push(context, MaterialPageRoute(
+                  builder: (context) => OrderList(),
+                ));
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Badge(
+                  child: Icon(Icons.shopping_cart, color: Colors.white,size: 40),
+                  badgeContent: Text(cart.listLength(), style: TextStyle(color: Colors.white),),
+                  badgeColor: Colors.amber,
+                  toAnimate: true,
+                  animationType: BadgeAnimationType.fade,
+                ),
               ),
             ),
           ],

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:food_app/model/food_item.dart';
 
 class BurgerListGen extends StatelessWidget {
-  FoodItem _foodItem;
+  final FoodItem _foodItem;
 
   BurgerListGen(this._foodItem);
 

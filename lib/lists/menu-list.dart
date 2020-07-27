@@ -4,6 +4,8 @@ import 'package:food_app/lists/burger-list.dart';
 import 'package:food_app/model/cart_list.dart';
 import 'package:food_app/model/food_list.dart';
 
+import 'order_list.dart';
+
 class MenuItems extends StatefulWidget {
   @override
   _MenuItemsState createState() => _MenuItemsState();
@@ -36,14 +38,21 @@ class _MenuItemsState extends State<MenuItems> {
         title: Text('Menu'),
         centerTitle: true,
         actions: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Badge(
-              child: Icon(Icons.shopping_cart, color: Colors.white,size: 40),
-              badgeContent: Text(cart.listLength(), style: TextStyle(color: Colors.white),),
-              badgeColor: Colors.amber,
-              toAnimate: true,
-              animationType: BadgeAnimationType.fade,
+          InkWell(
+            onTap: (){
+              Navigator.push(context, MaterialPageRoute(
+                builder: (context) => OrderList(),
+              ));
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Badge(
+                child: Icon(Icons.shopping_cart, color: Colors.white,size: 40),
+                badgeContent: Text(cart.listLength(), style: TextStyle(color: Colors.white),),
+                badgeColor: Colors.amber,
+                toAnimate: true,
+                animationType: BadgeAnimationType.fade,
+              ),
             ),
           ),
         ],
