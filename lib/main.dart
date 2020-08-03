@@ -58,10 +58,12 @@ class _MainScreenState extends State<MainScreen> {
         centerTitle: true,
           actions: <Widget>[
             InkWell(
-              onTap: (){
-                Navigator.push(context, MaterialPageRoute(
+              onTap: () async{
+                await Navigator.push(context, MaterialPageRoute(
                   builder: (context) => OrderList(),
                 ));
+                setState(() {
+                });
               },
               child: Padding(
                 padding: const EdgeInsets.all(16.0),

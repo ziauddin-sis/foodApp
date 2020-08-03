@@ -36,19 +36,22 @@ class _OrderListState extends State<OrderList> {
           ),
         ],
       ),
-      body: AnimatedList(
-        key: _key,
-        initialItemCount: cart.list.length,
-        itemBuilder: (context, index, animation) {
-          return _buildItem(cart.list[index], animation, index);
-        },
-      ),
-    );
+      body: cart.list.length == 0
+          ? Center(child: Container(child: Text("No Item",style: TextStyle(
+        fontWeight: FontWeight.bold,
+      ),),))
+          : AnimatedList(
+            key: _key,
+            initialItemCount: cart.list.length,
+            itemBuilder: (context, index, animation) {
+              return _buildItem(cart.list[index], animation, index);
+            },
+          ),
+        );
   }
 
   // ignore: missing_return
   Widget _buildItem(FoodItem list, Animation<double> animation, int index) {
-    try{
       return SizeTransition(
         sizeFactor: animation,
         child: Card(
@@ -65,23 +68,21 @@ class _OrderListState extends State<OrderList> {
                 Icons.delete,
                 color: Colors.red,
               ),
-              onPressed: (){
+              onPressed: () async{
                 _removeItem(index);
+                await Future.delayed(Duration(milliseconds: 350), () {});
                 setState(() {
-
+                  cart.list.removeAt(index);
                 });
               },
             ),
           ),
         ),
       );
-    }catch(e) {
-      print(e);
-    }
   }
 
   void _removeItem(int index) {
-    FoodItem removeItem = cart.list.removeAt(index);
+    FoodItem removeItem = cart.list[index];
     AnimatedListRemovedItemBuilder builder = (context, animation){
       return _buildItem(removeItem, animation, index);
     };

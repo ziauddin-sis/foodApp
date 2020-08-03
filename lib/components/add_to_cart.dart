@@ -17,7 +17,7 @@ class AddToCart extends StatefulWidget {
 class _AddToCartState extends State<AddToCart> {
   FoodItem foodItem;
   CartList cart = CartList.instance;
-  int qty = 0;
+  int qty = 1;
   _AddToCartState(this.foodItem);
 
   @override

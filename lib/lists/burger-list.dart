@@ -21,14 +21,14 @@ class _BurgersState extends State<Burgers> {
     super.initState();
     lst = [
       FoodItem.name(
-          '1.jpg', 'Crispy Zinger', 'Chicken crunch burger', 200, 27, 0),
+          '1.jpg', 'Crispy Zinger', 'Chicken crunch burger', 200, 27, 1),
       FoodItem.name('5.jpg', 'The Hardbord Room',
-          'Beaf patty with mozzarella cheese', 600, 31, 0),
-      FoodItem.name('burger.jpg', 'Marben', 'Large beaf patty', 500, 76, 0),
+          'Beaf patty with mozzarella cheese', 600, 31, 1),
+      FoodItem.name('burger.jpg', 'Marben', 'Large beaf patty', 500, 76, 1),
       FoodItem.name('mughlai.jpg', 'Mughlai Chicken Burg',
-          'Juicy chicken chunks', 149, 9, 0),
+          'Juicy chicken chunks', 149, 9, 1),
       FoodItem.name('shotgun.jpg', 'Peri Peri Shotgun',
-          'New Peri Peri Shotgun Chicken burger', 180, 35, 0),
+          'New Peri Peri Shotgun Chicken burger', 180, 35, 1),
     ];
   }
 
@@ -42,10 +42,13 @@ class _BurgersState extends State<Burgers> {
         centerTitle: true,
         actions: <Widget>[
           InkWell(
-            onTap: (){
-              Navigator.push(context, MaterialPageRoute(
+            onTap: () async{
+              await Navigator.push(context, MaterialPageRoute(
                 builder: (context) => OrderList(),
               ));
+              setState(() {
+
+              });
             },
             child: Padding(
               padding: const EdgeInsets.all(16.0),
