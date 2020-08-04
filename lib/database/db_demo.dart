@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:food_app/database/dbhelper.dart';
+import 'package:food_app/model/deal.dart';
 
 class DBDemo extends StatefulWidget {
   @override
@@ -11,38 +12,68 @@ class _DBDemoState extends State<DBDemo> {
   final dbHelper = DBHelper.instance;
   String dropdownValue = 'One';
   List<String> lst = [];
+  List<String> flavor = [];
   List<String> variable = [];
   static int qty = 0, _value = 0;
+
+  List<Deal> cstLst = [];
+  List<Deal> spLst = [];
 
   void insertRow() async{
     Map<String, dynamic> row = {
       DBHelper.dealName : 'Test deal',
       DBHelper.dealPrice : 1200,
-      DBHelper.category : 'Drink',
+      DBHelper.category : 'Burger',
       DBHelper.chooseAny : 'Choose any one',
       DBHelper.quantity : 1,
-      DBHelper.itemName : 'Spirit',
+      DBHelper.itemName : 'Beef Burger',
     };
     final id = await  dbHelper.insertRow(row);
     print('Row ID: $id');
   }
 
-  void getAll() async{
+  Future<List<String>> getItems(String cat) async{
+    var items = await dbHelper.getItems(cat);
+    if(flavor.length > 0){
+      flavor = flavor;
+    }
+    else{
+      items.forEach((element) {
+        flavor.add(element['item']);
+      });
+    }
+    return flavor;
+  }
+
+  Future getAll() async{
     var getAll = await dbHelper.getAll();
     getAll.forEach((row) {
-      print(row);
+      cstLst.add(Deal(deal: row['deal'], price: row['price'], any: row['any'], category: row['category'],
+          id: row['id'], item: row['item'], qty: row['qty']));
+    });
+    cstLst.forEach((element) {
+      Deal deal = element;
+      print(deal.toString());
     });
   }
 
-  void getSp() async {
+  Future getSp() async {
     var getSpecific = await dbHelper.getSpecific('Test deal');
+    qty = 0;
+
     getSpecific.forEach((row) {
-      qty += int.parse(row['qty'].toString());
+      qty += row['qty'];
       lst.add(row['category']);
-      print(row);
+      spLst.add(Deal(category: row['category'], qty: row['qty'], any: row['any']));
     });
-    print(getSpecific);
-    variable = List.generate(qty*2, (index) => 'One');
+    variable = List.generate(qty, (index) => spLst[index].any);
+//    spLst.forEach((element) {
+//      print(element.toString());
+//    });
+    print(variable);
+    setState(() {
+
+    });
   }
 
     void getSpecificAll() async{
@@ -69,14 +100,15 @@ class _DBDemoState extends State<DBDemo> {
   }
 
   @override
-  void initState(){
+  void initState() {
+    // TODO: implement initState
     super.initState();
+    getAll();
     getSp();
   }
 
   @override
   Widget build(BuildContext context) {
-//    mixList();
     return Scaffold(
       appBar: AppBar(
         title: Text('Database demo'),
@@ -106,36 +138,66 @@ class _DBDemoState extends State<DBDemo> {
             ),
             Expanded(
                 child: ListView.builder(
+                  shrinkWrap: true,
+                  physics: ClampingScrollPhysics(),
                   itemCount: qty,
                   itemBuilder: (context, index){
                     return  Center(
                       child: Column(
                         children: <Widget>[
-                          Text(lst[index]),
-                          for(int i = 0; i < 2; i++)
-                            DropdownButton<String>(
-                              value: variable[index+i],
-                              icon: Icon(Icons.arrow_downward),
-                              iconSize: 24,
-                              elevation: 16,
-                              style: TextStyle(color: Colors.deepPurple),
-                              underline: Container(
-                                height: 2,
-                                color: Colors.deepPurpleAccent,
-                              ),
-                              onChanged: (String newValue) {
-                                setState(() {
-                                  variable[index+i] = newValue;
-                                });
-                              },
-                              items: <String>['One', 'Two', 'Three', 'Four']
-                                  .map<DropdownMenuItem<String>>((String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(value),
-                                );
-                              }).toList(),
-                            ),
+                          Text(spLst[index].category),
+                          FutureBuilder<List<String>>(
+                            future: getItems(spLst[index].category),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasError) {
+                                return Container();
+                              }
+                              else if (snapshot.hasData) {
+                                if(snapshot != null)
+                                  {
+//                                    snapshot.data.forEach((element) {
+//                                      flavor.add(element);
+//
+//                                    });
+                                    variable = flavor;
+                                  }
+                              }
+                              else{
+                                return CircularProgressIndicator();
+                              }
+                              return ListView.builder(
+                                shrinkWrap: true,
+                                physics: ClampingScrollPhysics(),
+                                itemCount: spLst[index].qty,
+                                itemBuilder: (context, index1) {
+                                  return DropdownButton<String>(
+                                    value: variable[index1],
+                                    icon: Icon(Icons.arrow_downward),
+                                    iconSize: 24,
+                                    elevation: 16,
+                                    style: TextStyle(color: Colors.deepPurple),
+                                    underline: Container(
+                                      height: 2,
+                                      color: Colors.deepPurpleAccent,
+                                    ),
+                                    onChanged: (String newValue) {
+                                      setState(() {
+                                        variable[index + index1] = newValue;
+                                      });
+                                    },
+                                    items: flavor
+                                        .map<DropdownMenuItem<String>>((
+                                        String value) {
+                                      return DropdownMenuItem<String>(
+                                        value: value,
+                                        child: Text(value),
+                                      );
+                                    }).toList(),
+                                  );
+                                },
+                              );
+                            }
+                          ),
                         ],
                       ),
                     );
