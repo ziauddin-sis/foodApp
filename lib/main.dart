@@ -1,6 +1,7 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:food_app/components/add_to_cart.dart';
+import 'package:food_app/components/deal_screen.dart';
 import 'package:food_app/components/image_slider.dart';
 import 'package:food_app/database/db_demo.dart';
 import 'package:food_app/lists/burger-list.dart';
@@ -14,13 +15,14 @@ import 'model/food_list.dart';
 void main() => runApp(MaterialApp(
   title: 'Food App',
   debugShowCheckedModeBanner: false,
-  initialRoute: '/db',
+  initialRoute: '/et',
   routes: {
 //    '/' : (context) => MainScreen(),
     '/menu' : (context) => MenuItems(),
     '/burger': (context) => Burgers(),
     '/cart' : (context) => AddToCart(),
     '/db' : (context) => DBDemo(),
+    '/et' : (context) => DealScreen(),
   },
 ));
 
