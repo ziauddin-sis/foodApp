@@ -14,19 +14,20 @@ class _DBDemoState extends State<DBDemo> {
   List<String> lst = [];
   List<String> flavor = [];
   List<String> variable = [];
-  static int qty = 0, _value = 0;
+  static int qty = 0;
 
   List<Deal> cstLst = [];
   List<Deal> spLst = [];
 
+  String deal = 'Azadi Deal';
   void insertRow() async{
     Map<String, dynamic> row = {
-      DBHelper.dealName : 'Test deal',
+      DBHelper.dealName : deal,
       DBHelper.dealPrice : 1200,
-      DBHelper.category : 'Burger',
-      DBHelper.chooseAny : 'Choose any one',
+      DBHelper.category : 'Drink',
+      DBHelper.chooseAny : 'Select One',
       DBHelper.quantity : 1,
-      DBHelper.itemName : 'Beef Burger',
+      DBHelper.itemName : 'Coca-Cola',
     };
     final id = await  dbHelper.insertRow(row);
     print('Row ID: $id');
@@ -58,7 +59,7 @@ class _DBDemoState extends State<DBDemo> {
   }
 
   Future getSp() async {
-    var getSpecific = await dbHelper.getSpecific('Test deal');
+    var getSpecific = await dbHelper.getSpecific(deal);
     qty = 0;
 
     getSpecific.forEach((row) {
@@ -77,7 +78,7 @@ class _DBDemoState extends State<DBDemo> {
   }
 
     void getSpecificAll() async{
-      var getSpecificAll = await dbHelper.getSpecificAll('Test deal');
+      var getSpecificAll = await dbHelper.getSpecificAll(deal);
       getSpecificAll.forEach((row) {
         print(row);
       });
@@ -85,7 +86,7 @@ class _DBDemoState extends State<DBDemo> {
   }
 
   void mixList() async{
-    List<Map<String, dynamic>> distinct = await dbHelper.getSpecific('Test deal');
+    List<Map<String, dynamic>> distinct = await dbHelper.getSpecific(deal);
 //    List<Map<String, dynamic>> lstTbl = await dbHelper.getSpecificAll('Test deal');
     distinct.forEach((e1) async{
       var getSpecific = await dbHelper.getItemList('Test deal', e1['category']);
@@ -103,8 +104,8 @@ class _DBDemoState extends State<DBDemo> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getAll();
-    getSp();
+//    getAll();
+//    getSp();
   }
 
   @override

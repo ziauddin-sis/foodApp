@@ -12,10 +12,10 @@ final dbHelper = DBHelper.instance;
 class _DealScreenState extends State<DealScreen> {
 
   Deal2 d;
-  List<Deal2> myLst = [];
+  List<Deal2> myLst;
 
   Future getList() async{
-    d = Deal2('Test deal');
+    d = Deal2('Azadi Deal');
     try{
       myLst = await d.dealItems();
       setState(() {
@@ -29,12 +29,12 @@ class _DealScreenState extends State<DealScreen> {
 
     for(int i=0; i < myLst.length; i++)
     {
-      print('${i+1} : ${myLst[i].dealName}');
+      print('${i+1} : ${myLst[i].proName}');
       if(myLst[i].children.length > 0)
       {
         for(var pro in myLst[i].children)
         {
-          print('    ${pro.dealName}');
+          print('    ${pro.proName}');
         }
       }
     }
@@ -67,7 +67,6 @@ class EntryItem extends StatelessWidget {
 
   final Deal2 deal2;
   const EntryItem(this.deal2);
-  final String _character = 'nothing';
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +75,7 @@ class EntryItem extends StatelessWidget {
 
   Widget _buildTiles(Deal2 deal2) {
 //    if (deal2.children.isEmpty) return ListTile(
-//        title: Text(deal2.dealName),
+//        title: Text(deal2.proName),
 //        leading: Radio(
 //            value: 0,
 //            groupValue: _character,
@@ -87,11 +86,11 @@ class EntryItem extends StatelessWidget {
 //    );
     return ExpansionTile(
         key: PageStorageKey<Deal2>(deal2),
-        title: Text(deal2.dealName, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red), ),
+        title: Text(deal2.proName, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red), ),
         subtitle: Text('Choose any One'),
         children: <Widget>[
           RadioButtonGroup(
-              labels: deal2.children.map((e) => e.dealName).toList(),
+              labels: deal2.children.map((e) => e.proName).toList(),
               onSelected: (val){
                 print(val);
               },
@@ -103,24 +102,26 @@ class EntryItem extends StatelessWidget {
 
 
 class Deal2{
-  String dealName;
+  String proName, any;
+  int qty;
   List<Deal2> children;
-  List<Deal2> productLst = [];
+  List<Deal2> productLst;
 
-  Deal2( this.dealName, [ this.children = const <Deal2>[] ]);
+  Deal2( this.proName, [ this.children = const <Deal2>[] ]);
+
 
   Future<List<Deal2>> dealItems() async{
-    var product = await dbHelper.getSpecific(dealName);
+    var product = await dbHelper.getSpecific(this.proName);
     for(int i = 0; i < product.length; i++)
       {
         var productItem = await dbHelper.getItems(product[i]['category']);
 
         List<Deal2> itmLst = List();
 
-        productItem.forEach((element) {
-          if(element.containsKey('item'))
+        productItem.forEach((e) {
+          if(e.containsKey('item'))
             {
-              itmLst.add(Deal2(element['item']));
+              itmLst.add(Deal2(e['item']));
             }
           else{
             productLst.add(Deal2(product[i]['category']));
@@ -131,12 +132,12 @@ class Deal2{
     return Future.value(productLst);
 //    for(int i=0; i < productLst.length; i++)
 //    {
-//      print('${i+1} : ${productLst[i].dealName}');
+//      print('${i+1} : ${productLst[i].proName}');
 //      if(productLst[i].children.length > 0)
 //      {
 //        for(var pro in productLst[i].children)
 //        {
-//          print(pro.dealName);
+//          print(pro.proName);
 //        }
 //      }
 //    }
