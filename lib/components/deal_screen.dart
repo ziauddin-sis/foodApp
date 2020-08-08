@@ -8,14 +8,17 @@ class DealScreen extends StatefulWidget {
   _DealScreenState createState() => _DealScreenState();
 }
 final dbHelper = DBHelper.instance;
+int totalQty = 0;
+List<String> _picked = List(totalQty);
 
 class _DealScreenState extends State<DealScreen> {
 
   Deal2 d;
-  List<Deal2> myLst;
+  List<Deal2> myLst = [];
 
   Future getList() async{
-    d = Deal2('Azadi Deal');
+    String deal = 'Azadi Deal';
+    d = Deal2(proName: deal);
     try{
       myLst = await d.dealItems();
       setState(() {
@@ -56,6 +59,8 @@ class _DealScreenState extends State<DealScreen> {
         centerTitle: true,
       ),
       body: ListView.builder(
+          shrinkWrap: true,
+          scrollDirection: Axis.vertical,
           itemBuilder: (context, index) => EntryItem(myLst[index]),
           itemCount: myLst.length,
       ),
@@ -86,28 +91,68 @@ class EntryItem extends StatelessWidget {
 //    );
     return ExpansionTile(
         key: PageStorageKey<Deal2>(deal2),
+        initiallyExpanded: true,
         title: Text(deal2.proName, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red), ),
-        subtitle: Text('Choose any One'),
         children: <Widget>[
-          RadioButtonGroup(
-              labels: deal2.children.map((e) => e.proName).toList(),
-              onSelected: (val){
-                print(val);
-              },
-          ),
+          ListView.builder(
+              scrollDirection: Axis.vertical,
+              physics: ClampingScrollPhysics(),
+              itemCount: deal2.qty,
+              shrinkWrap: true,
+              key: PageStorageKey<Deal2>(deal2),
+              itemBuilder: (context, index){
+                return ItemSubList(deal2);
+              }),
         ],
     );
   }
 }
 
+class ItemSubList extends StatelessWidget {
+
+  final Deal2 deal2;
+  const ItemSubList(this.deal2);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        child: Column(
+          children: <Widget>[
+            Align(
+              alignment: Alignment.topLeft,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 20.0),
+                child: Text(deal2.any, textAlign: TextAlign.left,
+                  style: TextStyle(
+                    fontSize: 10.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+            RadioButtonGroup(
+              key: PageStorageKey(Deal2),
+              picked: _picked[0],
+              activeColor: Colors.red,
+              labels: deal2.children.map((e) => e.proName).toList(),
+              onSelected: (val){
+                _picked.add(val);
+                print(val);
+              },
+            ),
+          ],
+        ),
+    );
+  }
+}
 
 class Deal2{
   String proName, any;
   int qty;
   List<Deal2> children;
-  List<Deal2> productLst;
+  List<Deal2> productLst = [];
 
-  Deal2( this.proName, [ this.children = const <Deal2>[] ]);
+  Deal2({ this.proName, this.any, this.qty, this.children = const <Deal2>[] });
 
 
   Future<List<Deal2>> dealItems() async{
@@ -115,19 +160,19 @@ class Deal2{
     for(int i = 0; i < product.length; i++)
       {
         var productItem = await dbHelper.getItems(product[i]['category']);
-
+        totalQty += product[i]['qty'];
         List<Deal2> itmLst = List();
 
         productItem.forEach((e) {
           if(e.containsKey('item'))
             {
-              itmLst.add(Deal2(e['item']));
+              itmLst.add(Deal2(proName: e['item']));
             }
           else{
-            productLst.add(Deal2(product[i]['category']));
+            productLst.add(Deal2(proName: product[i]['category'], any: product[i]['any'], qty: product[i]['qty']));
           }
         });
-        productLst.add(Deal2(product[i]['category'], itmLst));
+        productLst.add(Deal2(proName: product[i]['category'], any: product[i]['any'], qty: product[i]['qty'], children: itmLst));
     }
     return Future.value(productLst);
 //    for(int i=0; i < productLst.length; i++)
