@@ -104,8 +104,8 @@ class EntryItem extends StatelessWidget {
 class Deal2{
   String proName, any;
   int qty;
-  List<Deal2> children;
-  List<Deal2> productLst;
+  List<Deal2> children = [];
+  List<Deal2> productLst = [];
 
   Deal2( this.proName, [ this.children = const <Deal2>[] ]);
 
