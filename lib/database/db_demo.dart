@@ -24,10 +24,10 @@ class _DBDemoState extends State<DBDemo> {
     Map<String, dynamic> row = {
       DBHelper.dealName : deal,
       DBHelper.dealPrice : 1200,
-      DBHelper.category : 'Drink',
+      DBHelper.category : 'Drinks',
       DBHelper.chooseAny : 'Select One',
       DBHelper.quantity : 1,
-      DBHelper.itemName : 'Coca-Cola',
+      DBHelper.itemName : 'Spirit',
     };
     final id = await  dbHelper.insertRow(row);
     print('Row ID: $id');

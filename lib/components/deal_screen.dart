@@ -12,7 +12,7 @@ final dbHelper = DBHelper.instance;
 class _DealScreenState extends State<DealScreen> {
 
   Deal2 d;
-  List<Deal2> myLst;
+  List<Deal2> myLst = [];
 
   Future getList() async{
     d = Deal2('Azadi Deal');
