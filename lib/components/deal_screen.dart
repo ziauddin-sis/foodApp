@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:food_app/database/dbhelper.dart';
 import 'package:grouped_buttons/grouped_buttons.dart';
@@ -8,6 +7,12 @@ class DealScreen extends StatefulWidget {
   _DealScreenState createState() => _DealScreenState();
 }
 final dbHelper = DBHelper.instance;
+int totalQty = 0;
+//List<String> _picked = List(totalQty);
+//List<String> newList = [];
+//var _picked = List.generate(totalQty, (i) => List(totalQty), growable: false);
+
+Map<String, dynamic> _picked = Map();
 
 class _DealScreenState extends State<DealScreen> {
 
@@ -15,11 +20,13 @@ class _DealScreenState extends State<DealScreen> {
   List<Deal2> myLst = [];
 
   Future getList() async{
-    d = Deal2('Azadi Deal');
+    String deal = 'Azadi Deal';
+    d = Deal2(proName: deal);
     try{
       myLst = await d.dealItems();
       setState(() {
         myLst = myLst;
+//        myLst = List.from(myLst.reversed);
       });
     }
     catch(e)
@@ -56,8 +63,10 @@ class _DealScreenState extends State<DealScreen> {
         centerTitle: true,
       ),
       body: ListView.builder(
-          itemBuilder: (context, index) => EntryItem(myLst[index]),
-          itemCount: myLst.length,
+        shrinkWrap: true,
+        scrollDirection: Axis.vertical,
+        itemBuilder: (context, index) => EntryItem(myLst[index], index),
+        itemCount: myLst.length,
       ),
     );
   }
@@ -66,7 +75,8 @@ class _DealScreenState extends State<DealScreen> {
 class EntryItem extends StatelessWidget {
 
   final Deal2 deal2;
-  const EntryItem(this.deal2);
+  final int mainIndex;
+  const EntryItem(this.deal2, this.mainIndex);
 
   @override
   Widget build(BuildContext context) {
@@ -74,72 +84,103 @@ class EntryItem extends StatelessWidget {
   }
 
   Widget _buildTiles(Deal2 deal2) {
-//    if (deal2.children.isEmpty) return ListTile(
-//        title: Text(deal2.proName),
-//        leading: Radio(
-//            value: 0,
-//            groupValue: _character,
-//            onChanged: (val){
-//              setSt
-//              print('Radio Button : $val');
-//            }),
-//    );
     return ExpansionTile(
-        key: PageStorageKey<Deal2>(deal2),
-        title: Text(deal2.proName, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red), ),
-        subtitle: Text('Choose any One'),
-        children: <Widget>[
-          RadioButtonGroup(
-              labels: deal2.children.map((e) => e.proName).toList(),
-              onSelected: (val){
-                print(val);
-              },
-          ),
-        ],
+      key: PageStorageKey<Deal2>(deal2),
+      initiallyExpanded: true,
+      title: Text(deal2.proName, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red), ),
+      subtitle: Text('Choose any ${deal2.qty}'),
+      children: <Widget>[
+        ListView.builder(
+            scrollDirection: Axis.vertical,
+            physics: ClampingScrollPhysics(),
+            itemCount: deal2.qty,
+            shrinkWrap: true,
+            key: PageStorageKey<Deal2>(deal2),
+            itemBuilder: (context, subIndex){
+              return ItemSubList(deal2, mainIndex, subIndex);
+            }),
+      ],
     );
   }
 }
 
+class ItemSubList extends StatefulWidget {
+
+  final Deal2 deal2;
+  final int mainIndex, subIndex;
+  const ItemSubList(this.deal2, this.mainIndex, this.subIndex);
+
+  @override
+  _ItemSubListState createState() => _ItemSubListState();
+}
+
+class _ItemSubListState extends State<ItemSubList> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Column(
+        children: <Widget>[
+          Align(
+            alignment: Alignment.topLeft,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 20.0),
+              child: Text(widget.deal2.any, textAlign: TextAlign.left,
+                style: TextStyle(
+                  fontSize: 10.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+          RadioButtonGroup(
+            key: PageStorageKey(Deal2),
+//            picked: _picked[widget.mainIndex][widget.subIndex],
+            picked: _picked['${widget.mainIndex},${widget.subIndex}'],
+            activeColor: Colors.red,
+            labels: widget.deal2.children.map((e) => e.proName).toList(),
+            onSelected: (val){
+              setState(() {
+//                _picked[widget.mainIndex][widget.subIndex] = val;
+                _picked['${widget.mainIndex},${widget.subIndex}'] = val;
+                print(val);
+                print(_picked);
+              });
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
 
 class Deal2{
   String proName, any;
   int qty;
-  List<Deal2> children = [];
+  List<Deal2> children;
   List<Deal2> productLst = [];
 
-  Deal2( this.proName, [ this.children = const <Deal2>[] ]);
+  Deal2({ this.proName, this.any, this.qty, this.children = const <Deal2>[] });
 
 
   Future<List<Deal2>> dealItems() async{
     var product = await dbHelper.getSpecific(this.proName);
     for(int i = 0; i < product.length; i++)
-      {
-        var productItem = await dbHelper.getItems(product[i]['category']);
+    {
+      var productItem = await dbHelper.getItems(product[i]['category']);
+      totalQty += product[i]['qty'];
+      List<Deal2> itmLst = List();
 
-        List<Deal2> itmLst = List();
-
-        productItem.forEach((e) {
-          if(e.containsKey('item'))
-            {
-              itmLst.add(Deal2(e['item']));
-            }
-          else{
-            productLst.add(Deal2(product[i]['category']));
-          }
-        });
-        productLst.add(Deal2(product[i]['category'], itmLst));
+      productItem.forEach((e) {
+        if(e.containsKey('item'))
+        {
+          itmLst.add(Deal2(proName: e['item']));
+        }
+        else{
+          productLst.add(Deal2(proName: product[i]['category'], any: product[i]['any'], qty: product[i]['qty']));
+        }
+      });
+      productLst.add(Deal2(proName: product[i]['category'], any: product[i]['any'], qty: product[i]['qty'], children: itmLst));
     }
     return Future.value(productLst);
-//    for(int i=0; i < productLst.length; i++)
-//    {
-//      print('${i+1} : ${productLst[i].proName}');
-//      if(productLst[i].children.length > 0)
-//      {
-//        for(var pro in productLst[i].children)
-//        {
-//          print(pro.proName);
-//        }
-//      }
-//    }
   }
 }

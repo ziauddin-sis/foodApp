@@ -26,7 +26,7 @@ class _DBDemoState extends State<DBDemo> {
       DBHelper.dealPrice : 1200,
       DBHelper.category : 'Drinks',
       DBHelper.chooseAny : 'Select One',
-      DBHelper.quantity : 1,
+      DBHelper.quantity : 2,
       DBHelper.itemName : 'Spirit',
     };
     final id = await  dbHelper.insertRow(row);
