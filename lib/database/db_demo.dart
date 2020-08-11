@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_app/database/dbhelper.dart';
 import 'package:food_app/model/deal.dart';
+import 'package:http/http.dart' as http;
 
 class DBDemo extends StatefulWidget {
   @override
@@ -100,6 +101,18 @@ class _DBDemoState extends State<DBDemo> {
     });
   }
 
+  Future<dynamic> getWebServices() async{
+
+    var response = await http.get(
+        Uri.encodeFull("http://72.52.142.19/cloud-kitchen/api/install?auth=622780154&sale_limit=20&expense_limit=20"),
+      headers: {
+      "Accept" : "application/json"
+      }
+    );
+    
+    print(response.body);
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -121,90 +134,95 @@ class _DBDemoState extends State<DBDemo> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            RaisedButton(
-                onPressed: insertRow,
-              child: Text("Insert"),
-            ),
-            RaisedButton(
-              onPressed: getAll,
-              child: Text("Get List"),
-            ),
-            RaisedButton(
-              onPressed: getSp,
-              child: Text("Get distinct"),
-            ),
-            RaisedButton(
-              onPressed: mixList,
-              child: Text("Get Sp. List"),
-            ),
-            Expanded(
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  physics: ClampingScrollPhysics(),
-                  itemCount: qty,
-                  itemBuilder: (context, index){
-                    return  Center(
-                      child: Column(
-                        children: <Widget>[
-                          Text(spLst[index].category),
-                          FutureBuilder<List<String>>(
-                            future: getItems(spLst[index].category),
-                            builder: (context, snapshot) {
-                              if (snapshot.hasError) {
-                                return Container();
-                              }
-                              else if (snapshot.hasData) {
-                                if(snapshot != null)
-                                  {
-//                                    snapshot.data.forEach((element) {
-//                                      flavor.add(element);
+//            RaisedButton(
+//                onPressed: insertRow,
+//              child: Text("Insert"),
+//            ),
 //
-//                                    });
-                                    variable = flavor;
-                                  }
-                              }
-                              else{
-                                return CircularProgressIndicator();
-                              }
-                              return ListView.builder(
-                                shrinkWrap: true,
-                                physics: ClampingScrollPhysics(),
-                                itemCount: spLst[index].qty,
-                                itemBuilder: (context, index1) {
-                                  return DropdownButton<String>(
-                                    value: variable[index1],
-                                    icon: Icon(Icons.arrow_downward),
-                                    iconSize: 24,
-                                    elevation: 16,
-                                    style: TextStyle(color: Colors.deepPurple),
-                                    underline: Container(
-                                      height: 2,
-                                      color: Colors.deepPurpleAccent,
-                                    ),
-                                    onChanged: (String newValue) {
-                                      setState(() {
-                                        variable[index + index1] = newValue;
-                                      });
-                                    },
-                                    items: flavor
-                                        .map<DropdownMenuItem<String>>((
-                                        String value) {
-                                      return DropdownMenuItem<String>(
-                                        value: value,
-                                        child: Text(value),
-                                      );
-                                    }).toList(),
-                                  );
-                                },
-                              );
-                            }
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
+//            RaisedButton(
+//              onPressed: getAll,
+//              child: Text("Get List"),
+//            ),
+//            RaisedButton(
+//              onPressed: getSp,
+//              child: Text("Get distinct"),
+//            ),
+//            RaisedButton(
+//              onPressed: mixList,
+//              child: Text("Get Sp. List"),
+//            ),
+            RaisedButton(
+              onPressed: getWebServices,
+              child: Text("Get Web Data"),
             ),
+//            Expanded(
+//                child: ListView.builder(
+//                  shrinkWrap: true,
+//                  physics: ClampingScrollPhysics(),
+//                  itemCount: qty,
+//                  itemBuilder: (context, index){
+//                    return  Center(
+//                      child: Column(
+//                        children: <Widget>[
+//                          Text(spLst[index].category),
+//                          FutureBuilder<List<String>>(
+//                            future: getItems(spLst[index].category),
+//                            builder: (context, snapshot) {
+//                              if (snapshot.hasError) {
+//                                return Container();
+//                              }
+//                              else if (snapshot.hasData) {
+//                                if(snapshot != null)
+//                                  {
+////                                    snapshot.data.forEach((element) {
+////                                      flavor.add(element);
+////
+////                                    });
+//                                    variable = flavor;
+//                                  }
+//                              }
+//                              else{
+//                                return CircularProgressIndicator();
+//                              }
+//                              return ListView.builder(
+//                                shrinkWrap: true,
+//                                physics: ClampingScrollPhysics(),
+//                                itemCount: spLst[index].qty,
+//                                itemBuilder: (context, index1) {
+//                                  return DropdownButton<String>(
+//                                    value: variable[index1],
+//                                    icon: Icon(Icons.arrow_downward),
+//                                    iconSize: 24,
+//                                    elevation: 16,
+//                                    style: TextStyle(color: Colors.deepPurple),
+//                                    underline: Container(
+//                                      height: 2,
+//                                      color: Colors.deepPurpleAccent,
+//                                    ),
+//                                    onChanged: (String newValue) {
+//                                      setState(() {
+//                                        variable[index + index1] = newValue;
+//                                      });
+//                                    },
+//                                    items: flavor
+//                                        .map<DropdownMenuItem<String>>((
+//                                        String value) {
+//                                      return DropdownMenuItem<String>(
+//                                        value: value,
+//                                        child: Text(value),
+//                                      );
+//                                    }).toList(),
+//                                  );
+//                                },
+//                              );
+//                            }
+//                          ),
+//                        ],
+//                      ),
+//                    );
+//                  },
+//                ),
+//            ),
           ],
         ),
       ),
