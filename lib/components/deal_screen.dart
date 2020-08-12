@@ -19,38 +19,38 @@ class _DealScreenState extends State<DealScreen> {
   Deal2 d;
   List<Deal2> myLst = [];
 
-  Future getList() async{
-    String deal = 'Azadi Deal';
-    d = Deal2(proName: deal);
-    try{
-      myLst = await d.dealItems();
-      setState(() {
-        myLst = myLst;
-//        myLst = List.from(myLst.reversed);
-      });
-    }
-    catch(e)
-    {
-      print(e);
-    }
-
-    for(int i=0; i < myLst.length; i++)
-    {
-      print('${i+1} : ${myLst[i].proName}');
-      if(myLst[i].children.length > 0)
-      {
-        for(var pro in myLst[i].children)
-        {
-          print('    ${pro.proName}');
-        }
-      }
-    }
-  }
+//  Future getList() async{
+//    String deal = 'Azadi Deal';
+//    d = Deal2(proName: deal);
+//    try{
+//      myLst = await d.dealItems();
+//      setState(() {
+//        myLst = myLst;
+////        myLst = List.from(myLst.reversed);
+//      });
+//    }
+//    catch(e)
+//    {
+//      print(e);
+//    }
+//
+//    for(int i=0; i < myLst.length; i++)
+//    {
+//      print('${i+1} : ${myLst[i].proName}');
+//      if(myLst[i].children.length > 0)
+//      {
+//        for(var pro in myLst[i].children)
+//        {
+//          print('    ${pro.proName}');
+//        }
+//      }
+//    }
+//  }
 
   @override
   void initState() {
     super.initState();
-    getList();
+//    getList();
   }
 
   @override
@@ -162,25 +162,25 @@ class Deal2{
   Deal2({ this.proName, this.any, this.qty, this.children = const <Deal2>[] });
 
 
-  Future<List<Deal2>> dealItems() async{
-    var product = await dbHelper.getSpecific(this.proName);
-    for(int i = 0; i < product.length; i++)
-    {
-      var productItem = await dbHelper.getItems(product[i]['category']);
-      totalQty += product[i]['qty'];
-      List<Deal2> itmLst = List();
-
-      productItem.forEach((e) {
-        if(e.containsKey('item'))
-        {
-          itmLst.add(Deal2(proName: e['item']));
-        }
-        else{
-          productLst.add(Deal2(proName: product[i]['category'], any: product[i]['any'], qty: product[i]['qty']));
-        }
-      });
-      productLst.add(Deal2(proName: product[i]['category'], any: product[i]['any'], qty: product[i]['qty'], children: itmLst));
-    }
-    return Future.value(productLst);
-  }
+//  Future<List<Deal2>> dealItems() async{
+//    var product = await dbHelper.getSpecific(this.proName);
+//    for(int i = 0; i < product.length; i++)
+//    {
+//      var productItem = await dbHelper.getItems(product[i]['category']);
+//      totalQty += product[i]['qty'];
+//      List<Deal2> itmLst = List();
+//
+//      productItem.forEach((e) {
+//        if(e.containsKey('item'))
+//        {
+//          itmLst.add(Deal2(proName: e['item']));
+//        }
+//        else{
+//          productLst.add(Deal2(proName: product[i]['category'], any: product[i]['any'], qty: product[i]['qty']));
+//        }
+//      });
+//      productLst.add(Deal2(proName: product[i]['category'], any: product[i]['any'], qty: product[i]['qty'], children: itmLst));
+//    }
+//    return Future.value(productLst);
+//  }
 }

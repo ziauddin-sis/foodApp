@@ -1,6 +1,9 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:food_app/database/dbhelper.dart';
+import 'package:food_app/database/tables/tbl_company.dart';
 import 'package:food_app/model/deal.dart';
+import 'package:food_app/model/mdl_company.dart';
 import 'package:http/http.dart' as http;
 
 class DBDemo extends StatefulWidget {
@@ -11,6 +14,10 @@ class DBDemo extends StatefulWidget {
 class _DBDemoState extends State<DBDemo> {
 
   final dbHelper = DBHelper.instance;
+
+  final companyDbHelper = TblCompany.instance;
+
+
   String dropdownValue = 'One';
   List<String> lst = [];
   List<String> flavor = [];
@@ -34,18 +41,18 @@ class _DBDemoState extends State<DBDemo> {
     print('Row ID: $id');
   }
 
-  Future<List<String>> getItems(String cat) async{
-    var items = await dbHelper.getItems(cat);
-    if(flavor.length > 0){
-      flavor = flavor;
-    }
-    else{
-      items.forEach((element) {
-        flavor.add(element['item']);
-      });
-    }
-    return flavor;
-  }
+//  Future<List<String>> getItems(String cat) async{
+//    var items = await dbHelper.getItems(cat);
+//    if(flavor.length > 0){
+//      flavor = flavor;
+//    }
+//    else{
+//      items.forEach((element) {
+//        flavor.add(element['item']);
+//      });
+//    }
+//    return flavor;
+//  }
 
   Future getAll() async{
     var getAll = await dbHelper.getAll();
@@ -59,58 +66,90 @@ class _DBDemoState extends State<DBDemo> {
     });
   }
 
-  Future getSp() async {
-    var getSpecific = await dbHelper.getSpecific(deal);
-    qty = 0;
-
-    getSpecific.forEach((row) {
-      qty += row['qty'];
-      lst.add(row['category']);
-      spLst.add(Deal(category: row['category'], qty: row['qty'], any: row['any']));
-    });
-    variable = List.generate(qty, (index) => spLst[index].any);
+//  Future getSp() async {
+//    var getSpecific = await dbHelper.getSpecific(deal);
+//    qty = 0;
+//
+//    getSpecific.forEach((row) {
+//      qty += row['qty'];
+//      lst.add(row['category']);
+//      spLst.add(Deal(category: row['category'], qty: row['qty'], any: row['any']));
+//    });
+//    variable = List.generate(qty, (index) => spLst[index].any);
 //    spLst.forEach((element) {
 //      print(element.toString());
 //    });
-    print(variable);
-    setState(() {
+//    print(variable);
+//    setState(() {
+//
+//    });
+//  }
 
-    });
-  }
+//    void getSpecificAll() async{
+//      var getSpecificAll = await dbHelper.getSpecificAll(deal);
+//      getSpecificAll.forEach((row) {
+//        print(row);
+//      });
+//
+//  }
 
-    void getSpecificAll() async{
-      var getSpecificAll = await dbHelper.getSpecificAll(deal);
-      getSpecificAll.forEach((row) {
-        print(row);
-      });
-
-  }
-
-  void mixList() async{
-    List<Map<String, dynamic>> distinct = await dbHelper.getSpecific(deal);
+//  void mixList() async{
+//    List<Map<String, dynamic>> distinct = await dbHelper.getSpecific(deal);
 //    List<Map<String, dynamic>> lstTbl = await dbHelper.getSpecificAll('Test deal');
-    distinct.forEach((e1) async{
-      var getSpecific = await dbHelper.getItemList('Test deal', e1['category']);
-      lst.clear();
-      print(e1['category']);
-      print(e1['any']);
-      getSpecific.forEach((element) {
-        lst.add(element['any']);
-      });
-      print(lst);
-    });
-  }
+//    distinct.forEach((e1) async{
+//      var getSpecific = await dbHelper.getItemList('Test deal', e1['category']);
+//      lst.clear();
+//      print(e1['category']);
+//      print(e1['any']);
+//      getSpecific.forEach((element) {
+//        lst.add(element['any']);
+//      });
+//      print(lst);
+//    });
+//  }
 
   Future<dynamic> getWebServices() async{
-
+    List data;
     var response = await http.get(
         Uri.encodeFull("http://72.52.142.19/cloud-kitchen/api/install?auth=622780154&sale_limit=20&expense_limit=20"),
       headers: {
       "Accept" : "application/json"
       }
     );
-    
-    print(response.body);
+    var resBody = json.decode(response.body);
+    data = resBody["company"];
+    var company = Company.fromJson(data[0]);
+    print(company);
+    return company;
+  }
+
+  void insertCompany() async{
+    var myRow = await getWebServices();
+
+    Map<String, dynamic> row = {
+      TblCompany.id : myRow.id,
+      TblCompany.currency : myRow.currency,
+      TblCompany.timezone : myRow.timezone,
+      TblCompany.dateFormat : myRow.dateFormat,
+      TblCompany.outletId : myRow.outletId,
+      TblCompany.name : myRow.name,
+      TblCompany.email : myRow.email,
+      TblCompany.phone1 : myRow.phone1,
+      TblCompany.phone2 : myRow.phone2,
+      TblCompany.address : myRow.address,
+      TblCompany.status : myRow.status,
+      TblCompany.dateAdded : myRow.dateAdded,
+      TblCompany.expiryDate : myRow.expiryDate,
+      TblCompany.token : myRow.token
+    };
+
+    final id = await companyDbHelper.insertCompany(row);
+    print('Company return ID: $id');
+  }
+
+  Future getCompanies() async{
+    var getAll = await companyDbHelper.getCompanies();
+    print(getAll);
   }
 
   @override
@@ -134,15 +173,15 @@ class _DBDemoState extends State<DBDemo> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-//            RaisedButton(
-//                onPressed: insertRow,
-//              child: Text("Insert"),
-//            ),
-//
-//            RaisedButton(
-//              onPressed: getAll,
-//              child: Text("Get List"),
-//            ),
+            RaisedButton(
+                onPressed: insertRow,
+              child: Text("Insert"),
+            ),
+
+            RaisedButton(
+              onPressed: getAll,
+              child: Text("Get List"),
+            ),
 //            RaisedButton(
 //              onPressed: getSp,
 //              child: Text("Get distinct"),
@@ -154,6 +193,14 @@ class _DBDemoState extends State<DBDemo> {
             RaisedButton(
               onPressed: getWebServices,
               child: Text("Get Web Data"),
+            ),
+            RaisedButton(
+              onPressed: insertCompany,
+              child: Text("Insert Company"),
+            ),
+            RaisedButton(
+              onPressed: getCompanies,
+              child: Text("Get Company"),
             ),
 //            Expanded(
 //                child: ListView.builder(
