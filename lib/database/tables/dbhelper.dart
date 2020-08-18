@@ -76,18 +76,18 @@ class DBHelper {
     return await db.query(table1);
   }
 
-//  Future<List<Map<String, dynamic>>> getSpecific(String deal) async {
-//    Database db = await instance.database;
-//    var res = await db.rawQuery('SELECT DISTINCT category, qty, any FROM $table1 WHERE deal = ?', [deal]);
-//    return res;
-//  }
-//
-//  Future<List<Map<String, dynamic>>> getItems(String cat) async {
-//    Database db = await instance.database;
-//    var res = await db.rawQuery('SELECT DISTINCT item FROM $table1 WHERE category = ?', [cat]);
-//    return res;
-//  }
-//
+  Future<List<Map<String, dynamic>>> getSpecific(String deal) async {
+    Database db = await mainDbHelper.database;
+    var res = await db.rawQuery('SELECT DISTINCT category, qty, any FROM $table1 WHERE deal = ?', [deal]);
+    return res;
+  }
+
+  Future<List<Map<String, dynamic>>> getItems(String cat) async {
+    Database db = await mainDbHelper.database;
+    var res = await db.rawQuery('SELECT DISTINCT item FROM $table1 WHERE category = ?', [cat]);
+    return res;
+  }
+
 //  Future<List<Map<String, dynamic>>> getSpecificAll(String deal) async {
 //    Database db = await instance.database;
 //    var res = await db.rawQuery('SELECT * FROM $table1 WHERE deal = ? ', [deal]);

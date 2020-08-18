@@ -1,5 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:food_app/database/dbhelper.dart';
+import 'file:///D:/Flutter/foodApp/lib/database/tables/dbhelper.dart';
 import 'package:grouped_buttons/grouped_buttons.dart';
 
 class DealScreen extends StatefulWidget {
@@ -8,49 +9,44 @@ class DealScreen extends StatefulWidget {
 }
 final dbHelper = DBHelper.instance;
 int totalQty = 0;
-//List<String> _picked = List(totalQty);
-//List<String> newList = [];
-//var _picked = List.generate(totalQty, (i) => List(totalQty), growable: false);
-
-Map<String, dynamic> _picked = Map();
+List<String> _picked = List(totalQty);
 
 class _DealScreenState extends State<DealScreen> {
 
   Deal2 d;
   List<Deal2> myLst = [];
 
-//  Future getList() async{
-//    String deal = 'Azadi Deal';
-//    d = Deal2(proName: deal);
-//    try{
-//      myLst = await d.dealItems();
-//      setState(() {
-//        myLst = myLst;
-////        myLst = List.from(myLst.reversed);
-//      });
-//    }
-//    catch(e)
-//    {
-//      print(e);
-//    }
-//
-//    for(int i=0; i < myLst.length; i++)
-//    {
-//      print('${i+1} : ${myLst[i].proName}');
-//      if(myLst[i].children.length > 0)
-//      {
-//        for(var pro in myLst[i].children)
-//        {
-//          print('    ${pro.proName}');
-//        }
-//      }
-//    }
-//  }
+  Future getList() async{
+    String deal = 'Azadi Deal';
+    d = Deal2(proName: deal);
+    try{
+      myLst = await d.dealItems();
+      setState(() {
+        myLst = myLst;
+      });
+    }
+    catch(e)
+    {
+      print(e);
+    }
+
+    for(int i=0; i < myLst.length; i++)
+    {
+      print('${i+1} : ${myLst[i].proName}');
+      if(myLst[i].children.length > 0)
+      {
+        for(var pro in myLst[i].children)
+        {
+          print('    ${pro.proName}');
+        }
+      }
+    }
+  }
 
   @override
   void initState() {
     super.initState();
-//    getList();
+    getList();
   }
 
   @override
@@ -63,10 +59,10 @@ class _DealScreenState extends State<DealScreen> {
         centerTitle: true,
       ),
       body: ListView.builder(
-        shrinkWrap: true,
-        scrollDirection: Axis.vertical,
-        itemBuilder: (context, index) => EntryItem(myLst[index], index),
-        itemCount: myLst.length,
+          shrinkWrap: true,
+          scrollDirection: Axis.vertical,
+          itemBuilder: (context, index) => EntryItem(myLst[index], index),
+          itemCount: myLst.length,
       ),
     );
   }
@@ -85,21 +81,20 @@ class EntryItem extends StatelessWidget {
 
   Widget _buildTiles(Deal2 deal2) {
     return ExpansionTile(
-      key: PageStorageKey<Deal2>(deal2),
-      initiallyExpanded: true,
-      title: Text(deal2.proName, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red), ),
-      subtitle: Text('Choose any ${deal2.qty}'),
-      children: <Widget>[
-        ListView.builder(
-            scrollDirection: Axis.vertical,
-            physics: ClampingScrollPhysics(),
-            itemCount: deal2.qty,
-            shrinkWrap: true,
-            key: PageStorageKey<Deal2>(deal2),
-            itemBuilder: (context, subIndex){
-              return ItemSubList(deal2, mainIndex, subIndex);
-            }),
-      ],
+        key: PageStorageKey<Deal2>(deal2),
+        initiallyExpanded: true,
+        title: Text(deal2.proName, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red), ),
+        children: <Widget>[
+          ListView.builder(
+              scrollDirection: Axis.vertical,
+              physics: ClampingScrollPhysics(),
+              itemCount: deal2.qty,
+              shrinkWrap: true,
+              key: PageStorageKey<Deal2>(deal2),
+              itemBuilder: (context, index){
+                return ItemSubList(deal2, mainIndex+index);
+              }),
+        ],
     );
   }
 }
@@ -107,8 +102,8 @@ class EntryItem extends StatelessWidget {
 class ItemSubList extends StatefulWidget {
 
   final Deal2 deal2;
-  final int mainIndex, subIndex;
-  const ItemSubList(this.deal2, this.mainIndex, this.subIndex);
+  final int _index;
+  const ItemSubList(this.deal2, this._index);
 
   @override
   _ItemSubListState createState() => _ItemSubListState();
@@ -118,37 +113,35 @@ class _ItemSubListState extends State<ItemSubList> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Column(
-        children: <Widget>[
-          Align(
-            alignment: Alignment.topLeft,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 20.0),
-              child: Text(widget.deal2.any, textAlign: TextAlign.left,
-                style: TextStyle(
-                  fontSize: 10.0,
-                  fontWeight: FontWeight.bold,
+        child: Column(
+          children: <Widget>[
+            Align(
+              alignment: Alignment.topLeft,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 20.0),
+                child: Text(widget.deal2.any, textAlign: TextAlign.left,
+                  style: TextStyle(
+                    fontSize: 10.0,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ),
-          ),
-          RadioButtonGroup(
-            key: PageStorageKey(Deal2),
-//            picked: _picked[widget.mainIndex][widget.subIndex],
-            picked: _picked['${widget.mainIndex},${widget.subIndex}'],
-            activeColor: Colors.red,
-            labels: widget.deal2.children.map((e) => e.proName).toList(),
-            onSelected: (val){
-              setState(() {
-//                _picked[widget.mainIndex][widget.subIndex] = val;
-                _picked['${widget.mainIndex},${widget.subIndex}'] = val;
-                print(val);
-                print(_picked);
-              });
-            },
-          ),
-        ],
-      ),
+            RadioButtonGroup(
+              key: PageStorageKey(Deal2),
+              picked: _picked[widget._index],
+              activeColor: Colors.red,
+              labels: widget.deal2.children.map((e) => e.proName).toList(),
+              onSelected: (val){
+                setState(() {
+                  _picked[widget._index] = val;
+                  print(val);
+                  print(_picked);
+                });
+              },
+            ),
+          ],
+        ),
     );
   }
 }
@@ -162,25 +155,25 @@ class Deal2{
   Deal2({ this.proName, this.any, this.qty, this.children = const <Deal2>[] });
 
 
-//  Future<List<Deal2>> dealItems() async{
-//    var product = await dbHelper.getSpecific(this.proName);
-//    for(int i = 0; i < product.length; i++)
-//    {
-//      var productItem = await dbHelper.getItems(product[i]['category']);
-//      totalQty += product[i]['qty'];
-//      List<Deal2> itmLst = List();
-//
-//      productItem.forEach((e) {
-//        if(e.containsKey('item'))
-//        {
-//          itmLst.add(Deal2(proName: e['item']));
-//        }
-//        else{
-//          productLst.add(Deal2(proName: product[i]['category'], any: product[i]['any'], qty: product[i]['qty']));
-//        }
-//      });
-//      productLst.add(Deal2(proName: product[i]['category'], any: product[i]['any'], qty: product[i]['qty'], children: itmLst));
-//    }
-//    return Future.value(productLst);
-//  }
+  Future<List<Deal2>> dealItems() async{
+    var product = await dbHelper.getSpecific(this.proName);
+    for(int i = 0; i < product.length; i++)
+      {
+        var productItem = await dbHelper.getItems(product[i]['category']);
+        totalQty += product[i]['qty'];
+        List<Deal2> itmLst = List();
+
+        productItem.forEach((e) {
+          if(e.containsKey('item'))
+            {
+              itmLst.add(Deal2(proName: e['item']));
+            }
+          else{
+            productLst.add(Deal2(proName: product[i]['category'], any: product[i]['any'], qty: product[i]['qty']));
+          }
+        });
+        productLst.add(Deal2(proName: product[i]['category'], any: product[i]['any'], qty: product[i]['qty'], children: itmLst));
+    }
+    return Future.value(productLst);
+  }
 }

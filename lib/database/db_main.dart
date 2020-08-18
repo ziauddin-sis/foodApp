@@ -1,6 +1,14 @@
 import 'dart:io';
-import 'package:food_app/database/dbhelper.dart';
+import 'file:///D:/Flutter/foodApp/lib/database/tables/dbhelper.dart';
+import 'package:food_app/database/tables/tbl_categories.dart';
 import 'package:food_app/database/tables/tbl_company.dart';
+import 'package:food_app/database/tables/tbl_customers.dart';
+import 'package:food_app/database/tables/tbl_item_menus.dart';
+import 'package:food_app/database/tables/tbl_item_modifiers.dart';
+import 'package:food_app/database/tables/tbl_modifiers.dart';
+import 'package:food_app/database/tables/tbl_outlet.dart';
+import 'package:food_app/database/tables/tbl_tables.dart';
+import 'package:food_app/database/tables/tbl_user.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
@@ -33,6 +41,14 @@ class MainDBHelper {
   Future _onCreate( Database db, int version) async {
     await db.execute(TblCompany.tblCompany);
     await db.execute(DBHelper.tblDealOnSpot);
+    await db.execute(TblOutlet.tblOutlet);
+    await db.execute(TblUsers.tblUsers);
+    await db.execute(TblTables.tblTables);
+    await db.execute(TblCategories.tblCategories);
+    await db.execute(TblModifiers.tblModifiers);
+    await db.execute(TblItemMenus.tblItemMenus);
+    await db.execute(TblItemModifiers.tblItemModifier);
+    await db.execute(TblCustomers.tblCustomers);
   }
   
 }
