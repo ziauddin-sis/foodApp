@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'file:///D:/Flutter/foodApp/lib/database/tables/dbhelper.dart';
+import 'package:food_app/database/tables/dbhelper.dart';
 import 'package:grouped_buttons/grouped_buttons.dart';
 
 class DealScreen extends StatefulWidget {

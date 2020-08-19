@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'file:///D:/Flutter/foodApp/lib/database/tables/dbhelper.dart';
+import 'package:food_app/database/tables/dbhelper.dart';
 import 'package:food_app/database/tables/tbl_categories.dart';
 import 'package:food_app/database/tables/tbl_company.dart';
 import 'package:food_app/database/tables/tbl_customers.dart';

@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:food_app/database/tables/dbhelper.dart';
 import 'package:food_app/database/tables/tbl_categories.dart';
-import 'file:///D:/Flutter/foodApp/lib/database/tables/dbhelper.dart';
 import 'package:food_app/database/tables/tbl_company.dart';
 import 'package:food_app/database/tables/tbl_customers.dart';
 import 'package:food_app/database/tables/tbl_item_menus.dart';
@@ -45,7 +45,7 @@ class _DBDemoState extends State<DBDemo> {
   List<String> lst = [];
   List<String> flavor = [];
   List<String> variable = [];
-  static int qty = 0;
+//  static int qty = 0;
 
   List<Deal> cstLst = [];
   List<Deal> spLst = [];

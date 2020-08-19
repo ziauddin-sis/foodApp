@@ -1,8 +1,5 @@
-import 'dart:io';
 import 'package:food_app/database/db_main.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart';
 
 class DBHelper {
   //Database name and version
