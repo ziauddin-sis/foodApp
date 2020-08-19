@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:food_app/database/tables/tbl_user.dart';
 
 class UserLogin extends StatefulWidget {
   @override
@@ -26,6 +27,21 @@ class _UserLoginState extends State<UserLogin> {
 
   final GlobalKey<FormState> _formKey = GlobalKey();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  final TblUsers userInstance = TblUsers.usersInstance;
+
+  Future getUser(email, pass) async{
+    var user = await userInstance.getSpecific(email, pass);
+    print(user);
+    if (user.isEmpty)
+      {
+        _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text('No User Found!')));
+      }
+    setState(() {
+      isLoading = false;
+    });
+    return user;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -187,13 +203,14 @@ class _UserLoginState extends State<UserLogin> {
                             {
                               _formKey.currentState.save();
                               isLoading = true;
-                              _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text('Hello ${email.text}..')));
+//                              _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text('Hello ${email.text}..')));
                               print('Email : ${email.text} and Password : ${password.text}');
+                              getUser(email.text, password.text);
                             }else{
                               isLoading = false;
                               _autoValidate = true;
                             }
-                            isLoading = false;
+//                            isLoading = false;
                           });
                         },
                         child: Center(

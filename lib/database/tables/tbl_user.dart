@@ -51,6 +51,12 @@ class TblUsers{
     return await db.insert(tableName, row);
   }
 
+  Future<List<Map<String, dynamic>>> getSpecific(String email, String pass) async {
+    Database db = await mainDbHelper.database;
+    var res = await db.rawQuery('SELECT * FROM $tableName WHERE email_address = ? and password = ?', [email, pass]);
+    return res;
+  }
+
   Future<List<Map<String, dynamic>>> getUsers() async {
     Database db = await mainDbHelper.database;
     return await db.query(tableName);
