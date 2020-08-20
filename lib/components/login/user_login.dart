@@ -32,15 +32,20 @@ class _UserLoginState extends State<UserLogin> {
 
   Future getUser(email, pass) async{
     var user = await userInstance.getSpecific(email, pass);
-    print(user);
+    print(user[0]['id']);
     if (user.isEmpty)
       {
         _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text('No User Found!')));
+        setState(() {
+          isLoading = false;
+        });
       }
-    setState(() {
+    else{
       isLoading = false;
-    });
-    return user;
+      Navigator.pushReplacementNamed(context, '/r', arguments: {
+        'id' : user[0]['id'],
+      });
+    }
   }
 
   @override
@@ -89,7 +94,10 @@ class _UserLoginState extends State<UserLogin> {
               padding: EdgeInsets.all(30.0),
               child: isLoading ?
               Center(
-                child: CircularProgressIndicator(),)
+                child: CircularProgressIndicator(
+                  backgroundColor: Colors.yellow[300],
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.redAccent),
+                ),)
                   :Column(
                 children: <Widget>[
                   Container(
@@ -184,33 +192,32 @@ class _UserLoginState extends State<UserLogin> {
                     ),
                   ),
                   SizedBox(height: 30,),
-                  Material(
-                    child: Container(
-                      height: 50,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        gradient: LinearGradient(
-                            colors: [
-                              Colors.yellow[300],
-                              Colors.red[200],
-                            ],
-                        ),
+                  Container(
+                    height: 50,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      gradient: LinearGradient(
+                          colors: [
+                            Colors.yellow[300],
+                            Colors.red[200],
+                          ],
                       ),
+                    ),
+                    child: Material(
+                      color: Colors.transparent,
                       child: InkWell(
+                        splashColor: Colors.yellow[100],
                         onTap: () {
                           setState(() {
                             if(_formKey.currentState.validate())
                             {
-                              _formKey.currentState.save();
                               isLoading = true;
-//                              _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text('Hello ${email.text}..')));
-                              print('Email : ${email.text} and Password : ${password.text}');
+                              _formKey.currentState.save();
                               getUser(email.text, password.text);
                             }else{
                               isLoading = false;
                               _autoValidate = true;
                             }
-//                            isLoading = false;
                           });
                         },
                         child: Center(
