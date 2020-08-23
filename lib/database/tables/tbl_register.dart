@@ -47,11 +47,11 @@ class TblRegister{
   ''';
 
 
-//  Future<int> insertInRegister(Map<String, dynamic> row) async {
-//    Database db = await mainDBHelper.database;
-//    var res = await db.insert('INSERT INTO $tableName ($id,$) WHERE email_address = ? and password = ?', );
-//    return db;
-//  }
+  Future<int> insertInRegister(ob, obd, ui) async {
+    Database db = await mainDBHelper.database;
+    var res = await db.rawInsert('INSERT INTO $tableName ($openingBalance,$openingBalanceDateTime,$userId) VALUES (?,?,?)', [ob, obd, ui]);
+    return res;
+  }
 
   Future<List<Map<String, dynamic>>> getUsers() async {
     Database db = await mainDBHelper.database;

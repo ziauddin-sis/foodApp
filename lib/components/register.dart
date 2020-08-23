@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:food_app/database/tables/tbl_register.dart';
+import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Register extends StatefulWidget {
   @override
@@ -15,6 +18,22 @@ class _RegisterState extends State<Register> {
 
   List<String> _shiftList = ['Morning', 'Evening', 'Night'];
   Map<String, dynamic> args;
+
+  final TblRegister _registerDb = TblRegister.registerInstance;
+  SharedPreferences _sharedPreferences;
+
+  Future onAmountEntered() async{
+    _sharedPreferences = await SharedPreferences.getInstance();
+    final df = new DateFormat('dd-MM-yyyy hh:mm a');
+    var date = df.format(DateTime.now());
+    print('Dropdown value : $_dropdown\n Amount : ${_amount.text}\n Id : ${args['id']}\n Date : $date');
+    var regRow = await _registerDb.insertInRegister(_amount.text, date.toString(), int.parse(args['id'].toString()));
+    print('Register return $regRow');
+    await _sharedPreferences.setInt('regId', regRow);
+    Navigator.of(context).pushNamed('/dbd', arguments: {
+      'regId' : _sharedPreferences.getInt('regId'),
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -153,7 +172,8 @@ class _RegisterState extends State<Register> {
             if (_formKey.currentState.validate())
             {
               _formKey.currentState.save();
-              print('Dropdown value : $_dropdown and Amount : ${_amount.text} and Id : ${args['id']}');
+//              print('Dropdown value : $_dropdown and Amount : ${_amount.text} and Id : ${args['id']}')
+            onAmountEntered();
             }
             else{
               _autoValidate = true;

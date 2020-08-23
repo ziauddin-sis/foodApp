@@ -7,6 +7,7 @@ import 'package:food_app/database/tables/tbl_item_menus.dart';
 import 'package:food_app/database/tables/tbl_item_modifiers.dart';
 import 'package:food_app/database/tables/tbl_modifiers.dart';
 import 'package:food_app/database/tables/tbl_outlet.dart';
+import 'package:food_app/database/tables/tbl_register.dart';
 import 'package:food_app/database/tables/tbl_tables.dart';
 import 'package:food_app/database/tables/tbl_user.dart';
 import 'package:path_provider/path_provider.dart';
@@ -49,6 +50,7 @@ class MainDBHelper {
     await db.execute(TblItemMenus.tblItemMenus);
     await db.execute(TblItemModifiers.tblItemModifier);
     await db.execute(TblCustomers.tblCustomers);
+    await db.execute(TblRegister.tblRegister);
   }
   
 }

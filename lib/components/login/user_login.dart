@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_app/database/tables/tbl_user.dart';
+import 'package:http/http.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UserLogin extends StatefulWidget {
   @override
@@ -27,6 +29,7 @@ class _UserLoginState extends State<UserLogin> {
 
   final GlobalKey<FormState> _formKey = GlobalKey();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+  SharedPreferences _sharedPreferences;
 
   final TblUsers userInstance = TblUsers.usersInstance;
 
@@ -41,6 +44,7 @@ class _UserLoginState extends State<UserLogin> {
         });
       }
     else{
+      setSharedPreferences(user);
       isLoading = false;
       Navigator.pushReplacementNamed(context, '/r', arguments: {
         'id' : user[0]['id'],
@@ -48,8 +52,31 @@ class _UserLoginState extends State<UserLogin> {
     }
   }
 
+  Future getSharedPreferences() async{
+    _sharedPreferences = await SharedPreferences.getInstance();
+    bool isLogin = _sharedPreferences.getBool('isLogin') ?? false;
+    if (isLogin == true){
+      Navigator.pushReplacementNamed(context, '/r', arguments: {
+        'id' : _sharedPreferences.getInt('userId'),
+      });
+    }
+  }
+
+  Future setSharedPreferences(user) async{
+    _sharedPreferences = await SharedPreferences.getInstance();
+    await _sharedPreferences.setBool('isLogin', true);
+    await _sharedPreferences.setInt('userId', user[0]['id']);
+  }
+
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getSharedPreferences();
+  }
+
+  @override
+  Widget build(BuildContext context){
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: Colors.white,
@@ -57,7 +84,7 @@ class _UserLoginState extends State<UserLogin> {
         child: Column(
           children: <Widget>[
             Flexible(
-              flex: 2,
+              flex: 1,
               child: Container(
                 height: 350,
                 decoration: BoxDecoration(
@@ -197,10 +224,10 @@ class _UserLoginState extends State<UserLogin> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       gradient: LinearGradient(
-                          colors: [
-                            Colors.yellow[300],
-                            Colors.red[200],
-                          ],
+                        colors: [
+                          Colors.yellow[300],
+                          Colors.red[200],
+                        ],
                       ),
                     ),
                     child: Material(

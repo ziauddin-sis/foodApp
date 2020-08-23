@@ -2,6 +2,8 @@ import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:food_app/components/add_to_cart.dart';
 import 'package:food_app/components/deal_screen.dart';
+import 'package:food_app/components/dir_dashboard/dashboard.dart';
+import 'package:food_app/components/dir_dashboard/dashboard_card.dart';
 import 'package:food_app/components/image_slider.dart';
 import 'package:food_app/components/login/user_login.dart';
 import 'package:food_app/components/register.dart';
@@ -17,9 +19,9 @@ import 'model/food_list.dart';
 void main() => runApp(MaterialApp(
   title: 'Food App',
   debugShowCheckedModeBanner: false,
-  initialRoute: '/ul',
+  initialRoute: '/dbd',
   routes: {
-//    '/' : (context) => MainScreen(),
+    '/' : (context) => MainScreen(),
     '/menu' : (context) => MenuItems(),
     '/burger': (context) => Burgers(),
     '/cart' : (context) => AddToCart(),
@@ -27,6 +29,7 @@ void main() => runApp(MaterialApp(
     '/et' : (context) => DealScreen(),
     '/ul' : (context) => UserLogin(),
     '/r' : (context) => Register(),
+    '/dbd' : (context) => Dashboard(),
   },
 ));
 
