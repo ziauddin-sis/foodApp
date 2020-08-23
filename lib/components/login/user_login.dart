@@ -72,7 +72,7 @@ class _UserLoginState extends State<UserLogin> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getSharedPreferences();
+//    getSharedPreferences();
   }
 
   @override

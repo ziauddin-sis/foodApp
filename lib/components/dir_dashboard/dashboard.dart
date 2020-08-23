@@ -54,10 +54,8 @@ class _DashboardState extends State<Dashboard> {
                   itemBuilder: (context, position){
                     return Container(
                       padding: position == lst.length ? const EdgeInsets.only(top:16.0) : const EdgeInsets.only(top:16.0, bottom: 16.0),
-                      child: InkWell(
-                          child: DashboardCard(lst[position]),
-                        onTap: (){
-                            Toast.show('In List', context);
+                      child: DashboardCard(lst[position], (){
+                        Toast.show(lst[position].name, context);
                         },
                       ),
                     );
@@ -70,11 +68,9 @@ class _DashboardState extends State<Dashboard> {
                   shrinkWrap: true,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
                   itemBuilder: (context, position){
-                    return InkWell(
-                        child: DashboardCard(lst[position]),
-                      onTap: (){
-                        Toast.show('In Grid', context);
-                      },
+                    return DashboardCard(lst[position],(){
+                      Toast.show(lst[position].name, context);
+                    },
                     );
                   },
                 );
