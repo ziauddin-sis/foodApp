@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:food_app/components/add_to_cart.dart';
+import 'package:food_app/database/tables/tbl_item_menus.dart';
 import 'package:food_app/lists/burger_list_generator.dart';
 import 'package:food_app/model/cart_list.dart';
 import 'package:food_app/model/food_item.dart';
+import 'package:food_app/model/mdl_item_menus.dart';
 
 import 'order_list.dart';
 
@@ -13,8 +17,12 @@ class Burgers extends StatefulWidget {
 }
 
 class _BurgersState extends State<Burgers> {
+
+  final itemMenusDBHelper = TblItemMenus.itemMenusInstance;
   CartList cart = CartList.instance;
   List<FoodItem> lst = [];
+  List<ItemMenus> itmMenusLst = [];
+  bool isList = false;
 
   @override
   void initState() {
@@ -34,6 +42,29 @@ class _BurgersState extends State<Burgers> {
 
   @override
   Widget build(BuildContext context) {
+    final Map<String, dynamic> args = ModalRoute.of(context).settings.arguments;
+    print(args['catName']);
+
+    Future getItemMenus() async{
+      var itmMenus = await itemMenusDBHelper.getSpecificItemMenus(args['catName']);
+      itmMenus.forEach((element) {
+        itmMenusLst.add(ItemMenus(id: element['id'], code : element['code'], name: element['name'], salePrice: element['sale_price'],
+        photo: element['photo'] == null ? 'no_image.jpg' : element['photo'] , categoryName: element['category_name'], percentage: element['percentage']));
+      });
+
+      itmMenusLst.forEach((element) {
+        print(element);
+      });
+
+      if(itmMenusLst.length > 0){
+        setState(() {
+          isList = true;
+        });
+      }
+    }
+
+    getItemMenus();
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.red,
@@ -66,9 +97,9 @@ class _BurgersState extends State<Burgers> {
           ),
         ],
       ),
-      body: ListView.builder(
+      body: isList ?  ListView.builder(
         scrollDirection: Axis.vertical,
-        itemCount: lst.length,
+        itemCount: itmMenusLst.length,
         itemBuilder: (context, index) {
           return Container(
             margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
@@ -93,7 +124,11 @@ class _BurgersState extends State<Burgers> {
             ),
           );
         },
-      ),
+      ) :  Center(child: CircularProgressIndicator(
+        strokeWidth: 5,
+        backgroundColor: Colors.yellow[300],
+        valueColor: AlwaysStoppedAnimation<Color>(Colors.redAccent),
+      )),
     );
   }
 }

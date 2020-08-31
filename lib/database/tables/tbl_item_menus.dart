@@ -40,4 +40,10 @@ class TblItemMenus{
     Database db = await mainDbHelper.database;
     return await db.query(tableName);
   }
+
+  Future<List<Map<String, dynamic>>> getSpecificItemMenus(String name) async {
+    Database db = await mainDbHelper.database;
+    var res = await db.rawQuery('SELECT * FROM $tableName WHERE category_name = ?', [name]);
+    return res;
+  }
 }

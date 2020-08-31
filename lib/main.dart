@@ -12,6 +12,7 @@ import 'package:food_app/lists/burger-list.dart';
 import 'package:food_app/lists/menu-list.dart';
 import 'package:food_app/lists/order_list.dart';
 import 'package:food_app/model/cart_list.dart';
+import 'package:food_app/splash_screen.dart';
 import 'package:toast/toast.dart';
 import 'model/food_list.dart';
 
@@ -19,9 +20,9 @@ import 'model/food_list.dart';
 void main() => runApp(MaterialApp(
   title: 'Food App',
   debugShowCheckedModeBanner: false,
-  initialRoute: '/ul',
+  initialRoute: '/ss',
   routes: {
-    '/' : (context) => MainScreen(),
+//    '/' : (context) => MainScreen(),
     '/menu' : (context) => MenuItems(),
     '/burger': (context) => Burgers(),
     '/cart' : (context) => AddToCart(),
@@ -30,6 +31,7 @@ void main() => runApp(MaterialApp(
     '/ul' : (context) => UserLogin(),
     '/r' : (context) => Register(),
     '/dbd' : (context) => Dashboard(),
+    '/ss' : (context) => SplashScreen(),
   },
 ));
 
