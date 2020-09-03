@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:food_app/model/food_item.dart';
+import 'package:food_app/model/mdl_item_menus.dart';
 
 class BurgerListGen extends StatelessWidget {
-  final FoodItem _foodItem;
+  final ItemMenus _foodItem;
 
   BurgerListGen(this._foodItem);
 
@@ -18,7 +19,7 @@ class BurgerListGen extends StatelessWidget {
             Container(
               child: CircleAvatar(
                 radius: 30,
-                backgroundImage: AssetImage('assets/${_foodItem.img}'),
+                backgroundImage: _foodItem.photo.contains('no') ? AssetImage('assets/${_foodItem.photo}') : NetworkImage(_foodItem.photo),
               ),
             ),
             SizedBox(width: 10,),
@@ -43,7 +44,7 @@ class BurgerListGen extends StatelessWidget {
                       ),
                       SizedBox(height: 3,),
                       Text(
-                        _foodItem.detail,
+                        'Description',
                         textAlign: TextAlign.justify,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -66,7 +67,7 @@ class BurgerListGen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: <Widget>[
                     Text(
-                      'PKR ${_foodItem.price}',
+                      'PKR ${_foodItem.salePrice}',
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
@@ -75,16 +76,16 @@ class BurgerListGen extends StatelessWidget {
                         color: Colors.grey[800],
                       ),
                     ),
-                    SizedBox(height: 24,),
-                    Text(
-                      'GST ${_foodItem.gst}',
-                      style: TextStyle(
-                        fontFamily: 'Ubuntu',
-                        fontSize: 10,
-                        fontWeight: FontWeight.normal,
-                        color: Colors.red[500],
-                      ),
-                    ),
+//                    SizedBox(height: 24,),
+//                    Text(
+//                      'GST ${_foodItem.gst}',
+//                      style: TextStyle(
+//                        fontFamily: 'Ubuntu',
+//                        fontSize: 10,
+//                        fontWeight: FontWeight.normal,
+//                        color: Colors.red[500],
+//                      ),
+//                    ),
                   ],
                 ),
               ),

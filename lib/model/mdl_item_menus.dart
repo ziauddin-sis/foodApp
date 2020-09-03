@@ -7,10 +7,11 @@ class ItemMenus {
   final String photo;
   final String categoryName;
   final String percentage;
+  int quantity;
 
 
   ItemMenus({this.id, this.code, this.name, this.salePrice, this.photo,
-      this.categoryName, this.percentage});
+      this.categoryName, this.percentage, this.quantity});
 
   ItemMenus.fromJson(Map<String, dynamic> json)
   :

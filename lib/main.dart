@@ -22,7 +22,7 @@ void main() => runApp(MaterialApp(
   debugShowCheckedModeBanner: false,
   initialRoute: '/ss',
   routes: {
-//    '/' : (context) => MainScreen(),
+    // '/' : (context) => MainScreen(),
     '/menu' : (context) => MenuItems(),
     '/burger': (context) => Burgers(),
     '/cart' : (context) => AddToCart(),

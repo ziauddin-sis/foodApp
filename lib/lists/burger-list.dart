@@ -23,6 +23,7 @@ class _BurgersState extends State<Burgers> {
   List<FoodItem> lst = [];
   List<ItemMenus> itmMenusLst = [];
   bool isList = false;
+  Map<String, dynamic> args;
 
   @override
   void initState() {
@@ -38,32 +39,34 @@ class _BurgersState extends State<Burgers> {
       FoodItem.name('shotgun.jpg', 'Peri Peri Shotgun',
           'New Peri Peri Shotgun Chicken burger', 180, 35, 1),
     ];
+
+    Future.delayed(Duration(milliseconds: 500), (){getItemMenus();});
+  }
+
+  Future getItemMenus() async{
+    var itmMenus = await itemMenusDBHelper.getSpecificItemMenus(args['catName']);
+    itmMenus.forEach((element) {
+      itmMenusLst.add(ItemMenus(id: element['id'], code : element['code'], name: element['name'], salePrice: element['sale_price'],
+          photo: element['photo'] == null ? 'no_image.jpg' : element['photo'] , categoryName: element['category_name'], percentage: element['percentage'], quantity: 1));
+    });
+
+    itmMenusLst.forEach((element) {
+      print(element);
+    });
+
+    if(itmMenusLst.length > 0){
+      setState(() {
+        isList = true;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final Map<String, dynamic> args = ModalRoute.of(context).settings.arguments;
+    args = ModalRoute.of(context).settings.arguments;
     print(args['catName']);
 
-    Future getItemMenus() async{
-      var itmMenus = await itemMenusDBHelper.getSpecificItemMenus(args['catName']);
-      itmMenus.forEach((element) {
-        itmMenusLst.add(ItemMenus(id: element['id'], code : element['code'], name: element['name'], salePrice: element['sale_price'],
-        photo: element['photo'] == null ? 'no_image.jpg' : element['photo'] , categoryName: element['category_name'], percentage: element['percentage']));
-      });
-
-      itmMenusLst.forEach((element) {
-        print(element);
-      });
-
-      if(itmMenusLst.length > 0){
-        setState(() {
-          isList = true;
-        });
-      }
-    }
-
-    getItemMenus();
+//    getItemMenus();
 
     return Scaffold(
       appBar: AppBar(
@@ -109,13 +112,13 @@ class _BurgersState extends State<Burgers> {
               borderRadius: BorderRadius.circular(10),
               shadowColor: Colors.amberAccent[100],
               child: InkWell(
-                child: BurgerListGen(lst[index]),
+                child: BurgerListGen(itmMenusLst[index]),
                 onTap: () async {
                   await Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => AddToCart(
-                          foodItem: lst[index],
+                          foodItem: itmMenusLst[index],
                         ),
                       ));
                   setState(() {});

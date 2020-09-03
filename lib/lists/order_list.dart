@@ -1,7 +1,7 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:food_app/model/cart_list.dart';
-import 'package:food_app/model/food_item.dart';
+import 'package:food_app/model/mdl_item_menus.dart';
 
 class OrderList extends StatefulWidget {
   @override
@@ -51,18 +51,18 @@ class _OrderListState extends State<OrderList> {
   }
 
   // ignore: missing_return
-  Widget _buildItem(FoodItem list, Animation<double> animation, int index) {
+  Widget _buildItem(ItemMenus list, Animation<double> animation, int index) {
       return SizeTransition(
         sizeFactor: animation,
         child: Card(
           elevation: 2,
           child: ListTile(
             leading: CircleAvatar(
-              backgroundImage: AssetImage('assets/${cart.list[index].img}'),
+              backgroundImage: cart.list[index].photo.contains('no') ? AssetImage('assets/${cart.list[index].photo}') : NetworkImage(cart.list[index].photo),
             ),
             title: Text(cart.list[index].name),
             subtitle: Text(
-                '${cart.list[index].quantity} x ${cart.list[index].price} = ${cart.list[index].quantity * cart.list[index].price}'),
+                '${cart.list[index].quantity} x ${cart.list[index].salePrice} = ${cart.list[index].quantity * double.parse(cart.list[index].salePrice)}'),
             trailing: IconButton(
               icon: Icon(
                 Icons.delete,
@@ -82,7 +82,7 @@ class _OrderListState extends State<OrderList> {
   }
 
   void _removeItem(int index) {
-    FoodItem removeItem = cart.list[index];
+    ItemMenus removeItem = cart.list[index];
     AnimatedListRemovedItemBuilder builder = (context, animation){
       return _buildItem(removeItem, animation, index);
     };

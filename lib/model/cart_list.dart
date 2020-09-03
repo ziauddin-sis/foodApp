@@ -1,16 +1,17 @@
 import 'package:food_app/model/food_item.dart';
+import 'package:food_app/model/mdl_item_menus.dart';
 
 class CartList{
 
-  List<FoodItem> _list = [];
+  List<ItemMenus> _list = [];
 
   CartList._();
   static final CartList _instance = CartList._();
   static CartList get instance => _instance;
 
-  List<FoodItem> get list => _list;
+  List<ItemMenus> get list => _list;
 
-  void addItem(FoodItem f){
+  void addItem(ItemMenus f){
     _list.add(f);
   }
 
