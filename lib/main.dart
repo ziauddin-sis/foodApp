@@ -81,7 +81,7 @@ class _MainScreenState extends State<MainScreen> {
                 child: Badge(
                   child: Icon(Icons.shopping_cart, color: Colors.white,size: 40),
                   badgeContent: Text(cart.listLength(), style: TextStyle(color: Colors.white),),
-                  badgeColor: Colors.amber,
+                  badgeColor: Colors.red,
                   toAnimate: true,
                   animationType: BadgeAnimationType.fade,
                 ),
