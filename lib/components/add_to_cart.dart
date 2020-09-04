@@ -1,13 +1,15 @@
 import 'package:badges/badges.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:food_app/lists/order_list.dart';
 import 'package:food_app/model/cart_list.dart';
 import 'package:food_app/model/food_item.dart';
+import 'package:food_app/model/mdl_item_menus.dart';
 import 'package:toast/toast.dart';
 
 class AddToCart extends StatefulWidget {
 
-  final FoodItem foodItem;
+  final ItemMenus foodItem;
   const AddToCart ({ Key key, this.foodItem }) : super( key:key );
 
   @override
@@ -15,7 +17,7 @@ class AddToCart extends StatefulWidget {
 }
 
 class _AddToCartState extends State<AddToCart> {
-  FoodItem foodItem;
+  ItemMenus foodItem;
   CartList cart = CartList.instance;
   int qty = 1;
   _AddToCartState(this.foodItem);
@@ -59,7 +61,7 @@ class _AddToCartState extends State<AddToCart> {
                 height: MediaQuery.of(context).size.height * 0.4,
                 child: Image(
                   fit: BoxFit.cover,
-                  image: AssetImage('assets/${foodItem.img}'),
+                  image: foodItem.photo.contains('no') ? AssetImage('assets/${foodItem.photo}') : NetworkImage(foodItem.photo),
                 ),
               ),
             ),
@@ -86,7 +88,7 @@ class _AddToCartState extends State<AddToCart> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: <Widget>[
                               Text(
-                                'PKR \n${foodItem.price}/-',
+                                'PKR \n${foodItem.salePrice}/-',
                                 maxLines: 2,
                                 textAlign: TextAlign.justify,
                                 textDirection: TextDirection.ltr,
@@ -120,7 +122,7 @@ class _AddToCartState extends State<AddToCart> {
                                       height: 5,
                                     ),
                                     Text(
-                                      foodItem.detail,
+                                      'Detail',
                                       maxLines: 2,
                                       textAlign: TextAlign.center,
                                       overflow: TextOverflow.ellipsis,
@@ -134,18 +136,18 @@ class _AddToCartState extends State<AddToCart> {
                                   ],
                                 ),
                               ),
-                              Align(
-                                alignment: Alignment.bottomRight,
-                                child: Text(
-                                  'GST ${foodItem.gst}',
-                                  textAlign: TextAlign.left,
-                                  style: TextStyle(
-                                    fontSize: 8,
-                                    color: Colors.red[400],
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
+//                              Align(
+//                                alignment: Alignment.bottomRight,
+//                                child: Text(
+//                                  'GST ${foodItem.gst}',
+//                                  textAlign: TextAlign.left,
+//                                  style: TextStyle(
+//                                    fontSize: 8,
+//                                    color: Colors.red[400],
+//                                    fontWeight: FontWeight.bold,
+//                                  ),
+//                                ),
+//                              ),
                             ],
                           ),
                         ),
@@ -159,39 +161,86 @@ class _AddToCartState extends State<AddToCart> {
               child: Container(
                 width: MediaQuery.of(context).size.width,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
+                  padding: const EdgeInsets.fromLTRB(8, 2, 8, 16),
                   child: Material(
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(topLeft: Radius.circular(10.0), topRight: Radius.circular(10.0) )),
+                        borderRadius: BorderRadius.all(
+                            Radius.circular(10.0),
+                        ),
+                    ),
                     elevation: 10.0,
                     color: Colors.white,
-                    child: Row(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
-                        IconButton(
-                            icon: Icon(Icons.remove_circle,),
-                          color: Colors.red,
-                            onPressed: (){
-                              setState(() {
-                                if(qty > 0)
-                                  {
-                                    qty -= 1;
-                                    foodItem.quantity -= 1;
-                                  }
-                              });
-                            },
+                        SizedBox(height: 20,),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            IconButton(
+                                icon: Icon(
+                                  Icons.remove_circle,
+                                  size: 30,
+                                ),
+                              color: Colors.red,
+                                onPressed: (){
+                                  setState(() {
+                                    if(qty > 1)
+                                      {
+                                        qty -= 1;
+                                        foodItem.quantity -= 1;
+                                      }
+                                  });
+                                },
+                            ),
+                            Container(
+                              margin: EdgeInsets.symmetric(horizontal: 15.0),
+                                height: 50,
+                                width: 50,
+                                decoration: BoxDecoration(
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey[400],
+                                      blurRadius: 3,
+                                      spreadRadius: 0.5,
+                                    ),
+                                  ],
+                                  shape: BoxShape.circle,
+                                  color: Colors.amberAccent,
+                                ),
+                                child: Center(
+                                  child: Text(
+                                      qty.toString(),
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontFamily: 'Ubuntu',
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                            ),
+                            IconButton(
+                              icon: Icon(
+                                Icons.add_circle,
+                                size: 30,
+                              ),
+                              color: Colors.red,
+                              onPressed: (){
+                                setState(() {
+                                  qty += 1;
+                                  foodItem.quantity += 1;
+                                });
+                              },
+                            ),
+                          ],
                         ),
-                        Text(qty.toString()),
-                        IconButton(
-                          icon: Icon(Icons.add_circle,),
-                          color: Colors.red,
-                          onPressed: (){
-                            setState(() {
-                              qty += 1;
-                              foodItem.quantity += 1;
-                            });
-                          },
-                        ),
-                        RaisedButton.icon(
+                        SizedBox(height: 30,),
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.9,
+                          height: MediaQuery.of(context).size.height * 0.08,
+                          child: RaisedButton.icon(
+                            color: Colors.amber[400],
                             onPressed: (){
                               setState(() {
                                 if(qty <= 0)
@@ -199,14 +248,29 @@ class _AddToCartState extends State<AddToCart> {
                                   Toast.show('Please add at least one item',context);
                                 }
                                 else{
-                                  cart.addItem(foodItem);
+                                  cart.addItem(ItemMenus(id: foodItem.id, code: foodItem.code, name: foodItem.name, salePrice: foodItem.salePrice, percentage: foodItem.percentage, photo: foodItem.photo, quantity: foodItem.quantity));
                                   Toast.show(foodItem.name + ' Added..',context);
                                   print('Add to Cart: '+cart.listLength());
                                 }
                               });
                             },
-                            icon: Icon(Icons.add_shopping_cart),
-                            label: Text('Add to Cart'),
+                            icon: Icon(
+                                Icons.add_shopping_cart,
+                                color: Colors.red,
+                              size: 20,
+                            ),
+                            label: Text(
+                                'Add to Cart',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: 'Ubuntu',
+                                fontSize: 15,
+                                fontWeight: FontWeight.w500,
+                                wordSpacing: 2,
+                                fontStyle: FontStyle.normal,
+                              ),
+                            ),
+                          ),
                         ),
                       ],
                     ),
