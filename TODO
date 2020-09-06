@@ -5,3 +5,6 @@ TODO LIST
 1. Shared Preferences
 2. Responsiveness
 3. Dashboard
+
+Sales initial column
+userId, regId, date, time, totalAmount, orderId

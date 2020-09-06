@@ -1,4 +1,5 @@
 import 'package:food_app/database/db_main.dart';
+import 'package:sqflite/sqflite.dart';
 
 class TblSalesMaster{
 
@@ -46,5 +47,53 @@ class TblSalesMaster{
   static final deviceKey = 'device_key';
   static final remoteId = 'remote_id';
   static final companyId = 'company_id';
+
+  static final String tblSalesMaster = '''
+  CREATE TABLE $tableName(
+  $id INTEGER,
+  $customerId INTEGER,
+  $saleNo TEXT,
+  $totalItems TEXT,
+  $subTotal TEXT,
+  $paidAmount TEXT,
+  $dueAmount TEXT,
+  $disc TEXT,
+  $discActual TEXT,
+  $vat TEXT,
+  $totalPayable TEXT,
+  $paymentMethodId INTEGER,
+  $closeTime TEXT,
+  $tableId INTEGER,
+  $totalItemDiscountAmount TEXT,
+  $subTotalWithDiscount TEXT,
+  $subTotalDiscountAmount TEXT,
+  $totalDiscountAmount TEXT,
+  $deliveryCharge TEXT,
+  $subTotalDiscountValue TEXT,
+  $subTotalDiscountType TEXT,
+  $saleDate TEXT,
+  $dateTime TEXT,
+  $orderTime TEXT,
+  $cookingStartTime TEXT,
+  $cookingDoneTime TEXT,
+  $modified TEXT,
+  $userId INTEGER,
+  $waiterId INTEGER,
+  $outletId INTEGER,
+  $orderStatus INTEGER,
+  $orderType INTEGER,
+  $delStatus TEXT,
+  $saleVatObjects TEXT,
+  $deviceKey TEXT,
+  $remoteId INTEGER,
+  $companyId INTEGER,
+  )
+  ''';
+
+  Future<int> insertInSales(ob, obd, ui) async {
+    Database db = await mainDBHelper.database;
+    var res = await db.rawInsert('INSERT INTO $tableName () VALUES (?,?,?)', );
+    return res;
+  }
 
 }

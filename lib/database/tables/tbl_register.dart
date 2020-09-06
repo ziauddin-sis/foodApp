@@ -46,7 +46,6 @@ class TblRegister{
   )
   ''';
 
-
   Future<int> insertInRegister(ob, obd, ui) async {
     Database db = await mainDBHelper.database;
     var res = await db.rawInsert('INSERT INTO $tableName ($openingBalance,$openingBalanceDateTime,$userId) VALUES (?,?,?)', [ob, obd, ui]);
@@ -57,4 +56,5 @@ class TblRegister{
     Database db = await mainDBHelper.database;
     return await db.query(tableName);
   }
+
 }
