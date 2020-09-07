@@ -1,4 +1,5 @@
 import 'package:food_app/database/db_main.dart';
+import 'package:food_app/model/mdl_sales_master.dart';
 import 'package:sqflite/sqflite.dart';
 
 class TblSalesMaster{
@@ -90,10 +91,23 @@ class TblSalesMaster{
   )
   ''';
 
-  Future<int> insertInSales(ob, obd, ui) async {
+  Future<int> insertInSalesMaster(SalesMaster salesMaster) async {
     Database db = await mainDBHelper.database;
-    var res = await db.rawInsert('INSERT INTO $tableName () VALUES (?,?,?)', );
+    var res = await db.rawInsert('INSERT INTO $tableName ($id, $userId, $outletId, $dateTime, $saleNo, $subTotal, $vat) '
+        'VALUES ( ${salesMaster.id} ,${salesMaster.userId}, ${salesMaster.outletId}, ${salesMaster.dateTime}, ${salesMaster.saleNo},'
+        '${salesMaster.subTotal}, ${salesMaster.vat})');
     return res;
   }
 
+  Future<int> getSalesMasterCount() async {
+    Database db = await mainDBHelper.database;
+    var res = await db.rawQuery('SELECT COUNT(*) FROM $tableName');
+    int count = Sqflite.firstIntValue(res);
+    return count;
+  }
+
+  Future<List<Map<String, dynamic>>> getSalesMaster() async {
+    Database db = await mainDBHelper.database;
+    return await db.query(tableName);
+  }
 }

@@ -20,7 +20,7 @@ import 'model/food_list.dart';
 void main() => runApp(MaterialApp(
   title: 'Food App',
   debugShowCheckedModeBanner: false,
-  initialRoute: '/ss',
+  initialRoute: '/ul',
   routes: {
     // '/' : (context) => MainScreen(),
     '/menu' : (context) => MenuItems(),

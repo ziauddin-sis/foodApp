@@ -47,17 +47,30 @@ class _DashboardState extends State<Dashboard> {
       ),
       body: LayoutBuilder(
           builder: (context, constraints){
-              if(constraints.maxWidth < 600){
+              if(constraints.maxWidth < 400){
                 return ListView.builder(
                   itemCount: lst.length,
                   shrinkWrap: true,
                   itemBuilder: (context, position){
                     return Container(
                       padding: position == lst.length ? const EdgeInsets.only(top:16.0) : const EdgeInsets.only(top:16.0, bottom: 16.0),
-                      child: DashboardCard(lst[position], (){
+                      child: DashboardCard(lst[position], 250.0, 250.0, (){
                         Toast.show(lst[position].name, context);
                         },
                       ),
+                    );
+                  },
+                );
+              }
+              else if(constraints.maxWidth < 700){
+                return GridView.builder(
+                  itemCount: lst.length,
+                  shrinkWrap: true,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+                  itemBuilder: (context, position){
+                    return DashboardCard(lst[position], 220.0, 220.0, (){
+                      Toast.show(lst[position].name, context);
+                    },
                     );
                   },
                 );
@@ -66,11 +79,11 @@ class _DashboardState extends State<Dashboard> {
                 return GridView.builder(
                   itemCount: lst.length,
                   shrinkWrap: true,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4),
                   itemBuilder: (context, position){
-                    return DashboardCard(lst[position],(){
+                    return DashboardCard(lst[position], 250.0, 250.0, (){
                       Toast.show(lst[position].name, context);
-                    },
+                      },
                     );
                   },
                 );
