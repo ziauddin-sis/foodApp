@@ -628,11 +628,11 @@ class _SplashScreenState extends State<SplashScreen> {
 //      setState(() async {
         List items = await getItemMenus();
         if(items.length > 0){
-          await Navigator.of(context).pushReplacementNamed('/menu');
+          await Navigator.of(context).pushReplacementNamed('/ul');
         }
         else{
           await _downloadingServices();
-          await Navigator.of(context).pushReplacementNamed('/menu');
+          await Navigator.of(context).pushReplacementNamed('/ul');
         }
 //      });
     }

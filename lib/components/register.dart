@@ -30,7 +30,7 @@ class _RegisterState extends State<Register> {
     var regRow = await _registerDb.insertInRegister(_amount.text, date.toString(), int.parse(args['id'].toString()));
     print('Register return $regRow');
     await _sharedPreferences.setInt('regId', regRow);
-    Navigator.of(context).pushNamed('/dbd', arguments: {
+    Navigator.of(context).pushReplacementNamed('/dbd', arguments: {
       'regId' : _sharedPreferences.getInt('regId'),
     });
   }
