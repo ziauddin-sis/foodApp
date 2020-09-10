@@ -17,6 +17,7 @@ class _NewSalesState extends State<NewSales> {
   List<Categories> catLst = [];
 
   Future getCategories() async{
+    catLst.clear();
     var categories = await categoryDBHelper.getCategories();
     categories.forEach((element) {
       catLst.add(Categories(id: element['id'],categoryName: element['category_name'], description: element['description'],
@@ -34,6 +35,7 @@ class _NewSalesState extends State<NewSales> {
       backgroundColor: Colors.white,
       body: Column(
         children: [
+          //#region AppBar
           Container(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height * 0.15,
@@ -129,18 +131,11 @@ class _NewSalesState extends State<NewSales> {
               ],
             ),
           ),
+          //endregion
           Expanded(
             child: Row(
               children: [
-                Flexible(
-                  flex: 1,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        shape: BoxShape.rectangle,
-                      ),
-                    ),
-                ),
+                //# region Menu
                 Flexible(
                   flex: 1,
                   child: Container(
@@ -208,6 +203,18 @@ class _NewSalesState extends State<NewSales> {
                     ),
                   ),
                 ),
+                //endregion
+                //# region OrderList
+                Flexible(
+                  flex: 1,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.rectangle,
+                    ),
+                  ),
+                ),
+                //endregion
               ],
             ),
           ),
