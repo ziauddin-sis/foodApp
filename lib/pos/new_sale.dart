@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:food_app/components/register.dart';
 import 'package:food_app/database/tables/tbl_categories.dart';
 import 'package:food_app/model/mdl_categories.dart';
+import 'package:food_app/pos/tab_bar_view.dart';
 
 class NewSales extends StatefulWidget {
   @override
@@ -29,9 +30,6 @@ class _NewSalesState extends State<NewSales> {
 
   @override
   Widget build(BuildContext context) {
-
-    getCategories();
-
     return Scaffold(
       backgroundColor: Colors.white,
       body: Column(
@@ -138,7 +136,7 @@ class _NewSalesState extends State<NewSales> {
                   flex: 1,
                     child: Container(
                       decoration: BoxDecoration(
-                        color: Colors.green,
+                        color: Colors.white,
                         shape: BoxShape.rectangle,
                       ),
                     ),
@@ -152,8 +150,7 @@ class _NewSalesState extends State<NewSales> {
                     ),
                     child: Column(
                       children: [
-                        Flexible(
-                          flex: 1,
+                        Expanded(
                           child: Container(
                             color: Colors.white,
                             child: FutureBuilder(
@@ -163,31 +160,48 @@ class _NewSalesState extends State<NewSales> {
                                       && snapShot.hasData == null){
                                     return Center(child: CircularProgressIndicator());
                                   }
-                                  return GridView.builder(
-                                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 1),
-                                      scrollDirection: Axis.horizontal,
-                                      itemCount: catLst.length,
-                                      itemBuilder: (context, index){
-                                        return Card(
-                                          color: Colors.redAccent,
-                                          child: Center(
-                                            child: Text(catLst[index].categoryName,
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 20,
-                                              ),),
+                                  return MaterialApp(
+                                    debugShowCheckedModeBanner: false,
+                                    home: DefaultTabController(
+                                      length: catLst.length,
+                                      child: Scaffold(
+                                        backgroundColor: Colors.white,
+                                        appBar: PreferredSize(
+                                          preferredSize: Size.fromHeight(kToolbarHeight),
+                                          child: Container(
+                                            height: MediaQuery.of(context).size.height * 0.1,
+                                              child: TabBar(
+                                                indicatorColor: Colors.amberAccent,
+                                                isScrollable: true,
+                                                tabs: catLst.map<Widget>((Categories c) {
+                                                  return Tab(
+                                                    icon: Icon(
+                                                      Icons.style,
+                                                      color: Colors.amberAccent,
+                                                      size: 15,
+                                                    ),
+                                                    child: Text(
+                                                        c.categoryName.toUpperCase(),
+                                                        style: TextStyle(
+                                                          color: Colors.black,
+                                                          fontWeight: FontWeight.w400,
+                                                        ),
+                                                    ),
+                                                  );
+                                                }).toList(),
+                                              ),
                                           ),
-                                        );
-                                      }
+                                        ),
+                                        body: TabBarView(
+                                            children: catLst.map((Categories c){
+                                              return TabBarViewChild(c.categoryName);
+                                            }).toList(),
+                                        ),
+                                      ),
+                                    ),
                                   );
                                 }
                             ),
-                          ),
-                        ),
-                        Flexible(
-                          flex: 4,
-                          child: Container(
-                            color: Colors.cyan,
                           ),
                         ),
                       ],
