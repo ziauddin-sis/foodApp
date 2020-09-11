@@ -1,18 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:food_app/database/tables/tbl_item_menus.dart';
+import 'package:food_app/model/list/item_menu_list.dart';
 import 'package:food_app/model/mdl_item_menus.dart';
+import 'package:food_app/pos/new_sale.dart';
 
-class TabBarViewChild extends StatelessWidget {
 
-    String _categoryName;
-    TabBarViewChild(this._categoryName);
+class TabBarViewChild extends StatefulWidget {
+
+    String categoryName;
+    TabBarViewChild({Key key, this.categoryName}) : super(key:key);
+
+  @override
+  _TabBarViewChildState createState() => _TabBarViewChildState();
+}
+
+class _TabBarViewChildState extends State<TabBarViewChild> {
+
+    EPos ePos;
+
+    final ItemMenuList instance1 = ItemMenuList.instance;
 
     List<ItemMenus> itmLst = [];
 
     final itemMenus = TblItemMenus.itemMenusInstance;
 
     Future getSpecificItemMenus() async{
-      var items = await itemMenus.getSpecificItemMenus(_categoryName);
+      var items = await itemMenus.getSpecificItemMenus(widget.categoryName);
       itmLst.clear();
       items.forEach((e) {
         itmLst.add(ItemMenus(id: e['id'], categoryName: e['category_name'], code: e['code'],
@@ -24,6 +37,13 @@ class TabBarViewChild extends StatelessWidget {
       }
       return itmLst;
     }
+
+    @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    ePos = EPos();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,22 +65,29 @@ class TabBarViewChild extends StatelessWidget {
               itemBuilder: (context, index){
                 return Padding(
                   padding: const EdgeInsets.all(5.0),
-                  child: Card(
-                    elevation: 4,
-                    color: Colors.amberAccent,
-                    child: Center(
-                      child: Text(
-                        itmLst[index].name.toUpperCase(),
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.red,
-                          fontSize: 13,
-                          fontWeight: FontWeight.w700,
-                          fontFamily: 'Ubuntu',
-                          letterSpacing: 1.0,
+                  child: InkWell(
+                    child: Card(
+                      elevation: 4,
+                      color: Colors.amberAccent,
+                      child: Center(
+                        child: Text(
+                          itmLst[index].name.toUpperCase(),
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w700,
+                            fontFamily: 'Ubuntu',
+                            letterSpacing: 1.0,
+                          ),
                         ),
                       ),
                     ),
+                    onTap: (){
+                      // Provider.of<ProItemMenus>(context, listen: false).addNewItemInList(ItemMenus(name: itmLst[index].name.toUpperCase()));
+                      print(itmLst[index].name.toUpperCase());
+                      instance1.addItem(ItemMenus(name: itmLst[index].name));
+                    },
                   ),
                 );
               }

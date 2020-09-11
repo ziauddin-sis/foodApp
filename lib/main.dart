@@ -12,31 +12,56 @@ import 'package:food_app/lists/burger-list.dart';
 import 'package:food_app/lists/menu-list.dart';
 import 'package:food_app/lists/order_list.dart';
 import 'package:food_app/model/cart_list.dart';
+import 'package:food_app/model/provider/pro_item_menus.dart';
 import 'package:food_app/pos/new_sale.dart';
 import 'package:food_app/pos/tab_bar_view.dart';
 import 'package:food_app/splash_screen.dart';
+import 'package:provider/provider.dart';
 import 'package:toast/toast.dart';
 import 'model/food_list.dart';
 
 
-void main() => runApp(MaterialApp(
-  title: 'Food App',
-  debugShowCheckedModeBanner: false,
-  initialRoute: '/ns',
-  routes: {
-    // '/' : (context) => MainScreen(),
-    '/menu' : (context) => MenuItems(),
-    '/burger': (context) => Burgers(),
-    '/cart' : (context) => AddToCart(),
-    '/db' : (context) => DBDemo(),
-    '/et' : (context) => DealScreen(),
-    '/ul' : (context) => UserLogin(),
-    '/r' : (context) => Register(),
-    '/dbd' : (context) => Dashboard(),
-    '/ss' : (context) => SplashScreen(),
-    '/ns' : (context) => NewSales(),
-    // '/tb' : (context) => TabBarViewChild(),
-  },
+void main() => runApp(MultiProvider(
+  providers: [
+    ChangeNotifierProvider(create: (context) => ProItemMenus(),)
+  ],
+  child:   MaterialApp(
+
+    title: 'Food App',
+
+    debugShowCheckedModeBanner: false,
+
+    initialRoute: '/ns',
+
+    routes: {
+
+      // '/' : (context) => MainScreen(),
+
+      '/menu' : (context) => MenuItems(),
+
+      '/burger': (context) => Burgers(),
+
+      '/cart' : (context) => AddToCart(),
+
+      '/db' : (context) => DBDemo(),
+
+      '/et' : (context) => DealScreen(),
+
+      '/ul' : (context) => UserLogin(),
+
+      '/r' : (context) => Register(),
+
+      '/dbd' : (context) => Dashboard(),
+
+      '/ss' : (context) => SplashScreen(),
+
+      '/ns' : (context) => EPos(),
+
+      // '/tb' : (context) => TabBarViewChild(),
+
+    },
+
+  ),
 ));
 
 class MainScreen extends StatefulWidget {
