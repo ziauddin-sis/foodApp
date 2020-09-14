@@ -1,11 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:food_app/database/tables/tbl_categories.dart';
-import 'package:food_app/model/list/item_menu_list.dart';
 import 'package:food_app/model/mdl_categories.dart';
+import 'package:food_app/model/provider/pro_item_menus.dart';
+import 'package:food_app/pos/custom_list_row/row_custom_item.dart';
 import 'package:food_app/pos/tab_bar_view.dart';
+import 'package:provider/provider.dart';
+
+class NewSale extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: ChangeNotifierProvider<ProItemMenus>(
+        create: (context) => ProItemMenus(),
+        child: EPos(),
+      ),
+    );
+  }
+}
 
 class EPos extends StatefulWidget{
-
   @override
   _EPosState createState() => _EPosState();
 }
@@ -13,12 +27,9 @@ class EPos extends StatefulWidget{
 class _EPosState extends State<EPos> {
 
   final categoryDBHelper = TblCategories.categoriesInstance;
-
   String _orderType = 'Dine-In', _info = 'Table No. 1', _userName = 'ZiaUddin';
 
   List<Categories> catLst = [];
-
-  final ItemMenuList instance2 = ItemMenuList.instance;
 
   Future getCategories() async {
     catLst.clear();
@@ -37,13 +48,6 @@ class _EPosState extends State<EPos> {
     });
     return catLst;
   }
-
-  void refresh(){
-    setState(() {
-
-    });
-  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -215,7 +219,7 @@ class _EPosState extends State<EPos> {
                                         ),
                                         body: TabBarView(
                                           children: catLst.map((Categories c) {
-                                            return TabBarVigewChild(categoryName:c.categoryName);
+                                            return TabBarViewChild(categoryName:c.categoryName);
                                           }).toList(),
                                         ),
                                       ),
@@ -230,21 +234,23 @@ class _EPosState extends State<EPos> {
                 ),
                 //endregion
                 //# region OrderList
-                Flexible(
-                  flex: 1,
+                Expanded(
                   child: Container(
                     decoration: BoxDecoration(
                       color: Colors.white,
                       shape: BoxShape.rectangle,
                     ),
-                    child: ListView.builder(
-                          itemCount: instance2.list.length,
+                    child: Consumer<ProItemMenus>(
+                      builder: (context, itm, child){
+                        return ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: itm.item.length,
                           itemBuilder: (context, index){
-                            return ListTile(
-                              title: Text(instance2.list[index].name),
-                            );
+                            return CustomRowItem(itm.item[index]);
                           },
-                        ),
+                        );
+                      },
+                    ),
                   ),
                 ),
                 //endregion

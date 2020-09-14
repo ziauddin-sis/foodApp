@@ -18,6 +18,7 @@ class TblItemMenus{
   static final photo = 'photo';
   static final categoryName = 'category_name';
   static final percentage = 'percentage';
+  static final quantity = 'quantity';
 
   static final String tblItemMenus = '''
   CREATE TABLE $tableName(
@@ -27,7 +28,8 @@ class TblItemMenus{
   $salePrice TEXT,
   $photo INTEGER,
   $categoryName INTEGER,
-  $percentage TEXT
+  $percentage TEXT,
+  $quantity INTEGER
   )
   ''';
 

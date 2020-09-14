@@ -414,6 +414,7 @@ class _SplashScreenState extends State<SplashScreen> {
         TblItemMenus.photo : mLst[i].photo,
         TblItemMenus.categoryName : mLst[i].categoryName,
         TblItemMenus.percentage : mLst[i].percentage,
+
       };
 
       final id = await itmMenusDbHelper.insertItemMenus(row);
