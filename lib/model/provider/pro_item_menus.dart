@@ -15,4 +15,14 @@ class ProItemMenus extends ChangeNotifier{
     notifyListeners();
   }
 
+  setItemQuantity(ItemMenus _itm, int qty){
+    _itm.quantity = qty;
+    notifyListeners();
+  }
+
+  delItemFromList(ItemMenus itemMenus){
+    _proItemList.remove(itemMenus);
+    notifyListeners();
+  }
+
 }

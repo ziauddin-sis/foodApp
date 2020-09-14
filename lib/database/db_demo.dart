@@ -467,6 +467,7 @@ class _DBDemoState extends State<DBDemo> {
         TblItemMenus.photo : mLst[i].photo,
         TblItemMenus.categoryName : mLst[i].categoryName,
         TblItemMenus.percentage : mLst[i].percentage,
+        TblItemMenus.quantity : 1,
       };
 
       final id = await itmMenusDbHelper.insertItemMenus(row);

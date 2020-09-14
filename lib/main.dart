@@ -23,7 +23,7 @@ void main() => runApp(
   MaterialApp(
     title: 'Food App',
     debugShowCheckedModeBanner: false,
-    initialRoute: '/ss',
+    initialRoute: '/ns',
     routes: {
       // '/' : (context) => MainScreen(),
       '/menu' : (context) => MenuItems(),

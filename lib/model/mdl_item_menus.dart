@@ -20,6 +20,7 @@ class ItemMenus {
     salePrice = json['sale_price'],
     photo = json['photo'],
     categoryName = json['category_name'],
+    quantity = 1,
     percentage = json['percentage'];
 
   @override

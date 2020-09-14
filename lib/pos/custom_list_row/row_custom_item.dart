@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:food_app/model/mdl_item_menus.dart';
+import 'package:food_app/model/provider/pro_item_menus.dart';
+import 'package:provider/provider.dart';
+import 'package:provider/provider.dart';
 
 class CustomRowItem extends StatelessWidget {
 
@@ -67,15 +70,30 @@ class CustomRowItem extends StatelessWidget {
                 InkWell(
                   child: Icon(Icons.remove),
                   onTap: (){
-
+                    if(_itemMenus.quantity > 1)
+                      {
+                        _itemMenus.quantity--;
+                        Provider.of<ProItemMenus>(context, listen: false)
+                            .setItemQuantity(_itemMenus, _itemMenus.quantity);
+                      }
                   },
                 ),
                 Text(_itemMenus.quantity.toString()),
-                Icon(Icons.add),
+                InkWell(
+                  child: Icon(Icons.add),
+                  onTap: (){
+                    _itemMenus.quantity++;
+                    Provider.of<ProItemMenus>(context, listen: false)
+                        .setItemQuantity(_itemMenus, _itemMenus.quantity);
+                  },
+                ),
               ],
             ),
             SizedBox(width: 10,),
-            Icon(Icons.delete),
+            InkWell(child: Icon(Icons.delete), onTap: (){
+              Provider.of<ProItemMenus>(context, listen: false)
+                  .delItemFromList(_itemMenus);
+            },),
           ],
         ),
       ),
