@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:food_app/model/food_item.dart';
 import 'package:food_app/model/mdl_item_menus.dart';
 
 class BurgerListGen extends StatelessWidget {
@@ -19,13 +18,18 @@ class BurgerListGen extends StatelessWidget {
             Container(
               child: CircleAvatar(
                 radius: 30,
-                backgroundImage: _foodItem.photo.contains('no') ? AssetImage('assets/${_foodItem.photo}') : NetworkImage(_foodItem.photo),
+                backgroundImage: _foodItem.photo.contains('no')
+                    ? AssetImage('assets/${_foodItem.photo}')
+                    : NetworkImage(_foodItem.photo),
               ),
             ),
-            SizedBox(width: 10,),
+            SizedBox(
+              width: 10,
+            ),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 0),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 12, horizontal: 0),
                 child: Container(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -42,7 +46,9 @@ class BurgerListGen extends StatelessWidget {
                           color: Colors.amber[400],
                         ),
                       ),
-                      SizedBox(height: 3,),
+                      SizedBox(
+                        height: 3,
+                      ),
                       Text(
                         'Description',
                         textAlign: TextAlign.justify,
@@ -90,8 +96,8 @@ class BurgerListGen extends StatelessWidget {
                 ),
               ),
             ),
-         ],
-      ),
+          ],
+        ),
       ),
     );
   }

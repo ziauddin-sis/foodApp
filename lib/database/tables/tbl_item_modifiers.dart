@@ -1,15 +1,14 @@
 import 'package:sqflite/sqflite.dart';
-
 import '../db_main.dart';
 
-class TblItemModifiers{
-
+class TblItemModifiers {
   static final tableName = 'item_modifiers';
 
   final mainDbHelper = MainDBHelper.instance;
 
   TblItemModifiers._pvtConst();
-  static final TblItemModifiers itemModifiersInstance = TblItemModifiers._pvtConst();
+  static final TblItemModifiers itemModifiersInstance =
+      TblItemModifiers._pvtConst();
 
   static final id = 'id';
   static final modifierId = 'modifier_id';
@@ -35,7 +34,7 @@ class TblItemModifiers{
   )
   ''';
 
-  Future<int> insertItemModifier (Map<String, dynamic> itm) async{
+  Future<int> insertItemModifier(Map<String, dynamic> itm) async {
     Database db = await mainDbHelper.database;
     return await db.insert(tableName, itm);
   }

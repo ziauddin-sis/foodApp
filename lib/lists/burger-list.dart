@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:food_app/components/add_to_cart.dart';
@@ -17,7 +15,6 @@ class Burgers extends StatefulWidget {
 }
 
 class _BurgersState extends State<Burgers> {
-
   final itemMenusDBHelper = TblItemMenus.itemMenusInstance;
   CartList cart = CartList.instance;
   List<FoodItem> lst = [];
@@ -40,21 +37,31 @@ class _BurgersState extends State<Burgers> {
           'New Peri Peri Shotgun Chicken burger', 180, 35, 1),
     ];
 
-    Future.delayed(Duration(milliseconds: 500), (){getItemMenus();});
+    Future.delayed(Duration(milliseconds: 500), () {
+      getItemMenus();
+    });
   }
 
-  Future getItemMenus() async{
-    var itmMenus = await itemMenusDBHelper.getSpecificItemMenus(args['catName']);
+  Future getItemMenus() async {
+    var itmMenus =
+        await itemMenusDBHelper.getSpecificItemMenus(args['catName']);
     itmMenus.forEach((element) {
-      itmMenusLst.add(ItemMenus(id: element['id'], code : element['code'], name: element['name'], salePrice: element['sale_price'],
-          photo: element['photo'] == null ? 'no_image.jpg' : element['photo'] , categoryName: element['category_name'], percentage: element['percentage'], quantity: 1));
+      itmMenusLst.add(ItemMenus(
+          id: element['id'],
+          code: element['code'],
+          name: element['name'],
+          salePrice: element['sale_price'],
+          photo: element['photo'] == null ? 'no_image.jpg' : element['photo'],
+          categoryName: element['category_name'],
+          percentage: element['percentage'],
+          quantity: 1));
     });
 
     itmMenusLst.forEach((element) {
       print(element);
     });
 
-    if(itmMenusLst.length > 0){
+    if (itmMenusLst.length > 0) {
       setState(() {
         isList = true;
       });
@@ -76,13 +83,13 @@ class _BurgersState extends State<Burgers> {
         centerTitle: true,
         actions: <Widget>[
           InkWell(
-            onTap: () async{
-              await Navigator.push(context, MaterialPageRoute(
-                builder: (context) => OrderList(),
-              ));
-              setState(() {
-
-              });
+            onTap: () async {
+              await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => OrderList(),
+                  ));
+              setState(() {});
             },
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -100,38 +107,41 @@ class _BurgersState extends State<Burgers> {
           ),
         ],
       ),
-      body: isList ?  ListView.builder(
-        scrollDirection: Axis.vertical,
-        itemCount: itmMenusLst.length,
-        itemBuilder: (context, index) {
-          return Container(
-            margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-            child: Material(
-              color: Colors.white,
-              elevation: 5,
-              borderRadius: BorderRadius.circular(10),
-              shadowColor: Colors.amberAccent[100],
-              child: InkWell(
-                child: BurgerListGen(itmMenusLst[index]),
-                onTap: () async {
-                  await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => AddToCart(
-                          foodItem: itmMenusLst[index],
-                        ),
-                      ));
-                  setState(() {});
-                },
-              ),
-            ),
-          );
-        },
-      ) :  Center(child: CircularProgressIndicator(
-        strokeWidth: 5,
-        backgroundColor: Colors.yellow[300],
-        valueColor: AlwaysStoppedAnimation<Color>(Colors.redAccent),
-      )),
+      body: isList
+          ? ListView.builder(
+              scrollDirection: Axis.vertical,
+              itemCount: itmMenusLst.length,
+              itemBuilder: (context, index) {
+                return Container(
+                  margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                  child: Material(
+                    color: Colors.white,
+                    elevation: 5,
+                    borderRadius: BorderRadius.circular(10),
+                    shadowColor: Colors.amberAccent[100],
+                    child: InkWell(
+                      child: BurgerListGen(itmMenusLst[index]),
+                      onTap: () async {
+                        await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AddToCart(
+                                foodItem: itmMenusLst[index],
+                              ),
+                            ));
+                        setState(() {});
+                      },
+                    ),
+                  ),
+                );
+              },
+            )
+          : Center(
+              child: CircularProgressIndicator(
+              strokeWidth: 5,
+              backgroundColor: Colors.yellow[300],
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.redAccent),
+            )),
     );
   }
 }

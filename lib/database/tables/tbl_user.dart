@@ -1,10 +1,7 @@
-import 'package:food_app/model/mdl_user.dart';
 import 'package:sqflite/sqflite.dart';
-
 import '../db_main.dart';
 
-class TblUsers{
-
+class TblUsers {
   static final tableName = 'users';
 
   static final id = 'id';
@@ -52,9 +49,12 @@ class TblUsers{
     return await db.insert(tableName, row);
   }
 
-  Future<List<Map<String, dynamic>>> getSpecific(String email, String pass) async {
+  Future<List<Map<String, dynamic>>> getSpecific(
+      String email, String pass) async {
     Database db = await mainDbHelper.database;
-    var res = await db.rawQuery('SELECT * FROM $tableName WHERE email_address = ? and password = ? LIMIT 1', [email, pass]);
+    var res = await db.rawQuery(
+        'SELECT * FROM $tableName WHERE email_address = ? and password = ? LIMIT 1',
+        [email, pass]);
     return res;
   }
 

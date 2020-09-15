@@ -1,9 +1,7 @@
 import 'package:sqflite/sqflite.dart';
-
 import '../db_main.dart';
 
-class TblCategories{
-
+class TblCategories {
   static final tableName = 'categories';
 
   final mainDbHelper = MainDBHelper.instance;
@@ -29,7 +27,7 @@ class TblCategories{
   )
   ''';
 
-  Future<int> insertCategories (Map<String, dynamic> table) async{
+  Future<int> insertCategories(Map<String, dynamic> table) async {
     Database db = await mainDbHelper.database;
     return await db.insert(tableName, table);
   }

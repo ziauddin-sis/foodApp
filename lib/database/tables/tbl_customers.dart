@@ -1,9 +1,7 @@
 import 'package:sqflite/sqflite.dart';
-
 import '../db_main.dart';
 
-class TblCustomers{
-
+class TblCustomers {
   static final tableName = 'customers';
 
   static final id = 'id';

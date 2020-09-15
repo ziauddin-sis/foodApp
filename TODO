@@ -1,10 +1,4 @@
-Web Service Link:
-http://72.52.142.19/cloud-kitchen/api/install?auth=622780154&sale_limit=20&expense_limit=20
-
-TODO LIST
-1. Shared Preferences
-2. Responsiveness
-3. Dashboard
-
-Sales initial column
-userId, regId, date, time, totalAmount, orderId
+//TODO: IMPLEMENT CONFIG FILE
+//TODO: IMPLEMENT APP THEME
+//TODO: IMPLEMENT NEW DATABASE MECHANISM
+//TODO: CHANGE ITEM QUANTITY LAYOUT

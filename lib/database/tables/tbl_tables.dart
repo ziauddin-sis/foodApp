@@ -1,9 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:food_app/database/db_main.dart';
 import 'package:sqflite/sqflite.dart';
 
-class TblTables{
-
+class TblTables {
   static final tableName = 'tables';
 
   final mainDbHelper = MainDBHelper.instance;
@@ -35,7 +33,7 @@ class TblTables{
   )
   ''';
 
-  Future<int> insertTable (Map<String, dynamic> table) async{
+  Future<int> insertTable(Map<String, dynamic> table) async {
     Database db = await mainDbHelper.database;
     return await db.insert(tableName, table);
   }

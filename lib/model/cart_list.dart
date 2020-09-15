@@ -1,8 +1,6 @@
-import 'package:food_app/model/food_item.dart';
 import 'package:food_app/model/mdl_item_menus.dart';
 
-class CartList{
-
+class CartList {
   List<ItemMenus> _list = [];
 
   CartList._();
@@ -11,11 +9,11 @@ class CartList{
 
   List<ItemMenus> get list => _list;
 
-  void addItem(ItemMenus f){
+  void addItem(ItemMenus f) {
     _list.add(f);
   }
 
-  String listLength(){
+  String listLength() {
     return _list.length.toString();
   }
 

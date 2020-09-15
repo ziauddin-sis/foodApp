@@ -3,14 +3,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:food_app/lists/order_list.dart';
 import 'package:food_app/model/cart_list.dart';
-import 'package:food_app/model/food_item.dart';
 import 'package:food_app/model/mdl_item_menus.dart';
 import 'package:toast/toast.dart';
 
 class AddToCart extends StatefulWidget {
-
   final ItemMenus foodItem;
-  const AddToCart ({ Key key, this.foodItem }) : super( key:key );
+  const AddToCart({Key key, this.foodItem}) : super(key: key);
 
   @override
   _AddToCartState createState() => _AddToCartState(this.foodItem);
@@ -32,17 +30,26 @@ class _AddToCartState extends State<AddToCart> {
         centerTitle: true,
         actions: <Widget>[
           InkWell(
-            onTap: () async{
-               await Navigator.push(context, MaterialPageRoute(
-                builder: (context) => OrderList(),
-              ));
-               setState(() {});
+            onTap: () async {
+              await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => OrderList(),
+                  ));
+              setState(() {});
             },
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Badge(
-                child: Icon(Icons.shopping_cart, color: Colors.white, size: 40,),
-                badgeContent: Text(cart.list.length.toString(), style: TextStyle(color: Colors.white),),
+                child: Icon(
+                  Icons.shopping_cart,
+                  color: Colors.white,
+                  size: 40,
+                ),
+                badgeContent: Text(
+                  cart.list.length.toString(),
+                  style: TextStyle(color: Colors.white),
+                ),
                 badgeColor: Colors.amber,
                 toAnimate: true,
                 animationType: BadgeAnimationType.fade,
@@ -61,7 +68,9 @@ class _AddToCartState extends State<AddToCart> {
                 height: MediaQuery.of(context).size.height * 0.4,
                 child: Image(
                   fit: BoxFit.cover,
-                  image: foodItem.photo.contains('no') ? AssetImage('assets/${foodItem.photo}') : NetworkImage(foodItem.photo),
+                  image: foodItem.photo.contains('no')
+                      ? AssetImage('assets/${foodItem.photo}')
+                      : NetworkImage(foodItem.photo),
                 ),
               ),
             ),
@@ -164,61 +173,62 @@ class _AddToCartState extends State<AddToCart> {
                   padding: const EdgeInsets.fromLTRB(8, 2, 8, 16),
                   child: Material(
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(
-                            Radius.circular(10.0),
-                        ),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(10.0),
+                      ),
                     ),
                     elevation: 10.0,
                     color: Colors.white,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
-                        SizedBox(height: 20,),
+                        SizedBox(
+                          height: 20,
+                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             IconButton(
-                                icon: Icon(
-                                  Icons.remove_circle,
-                                  size: 30,
-                                ),
+                              icon: Icon(
+                                Icons.remove_circle,
+                                size: 30,
+                              ),
                               color: Colors.red,
-                                onPressed: (){
-                                  setState(() {
-                                    if(qty > 1)
-                                      {
-                                        qty -= 1;
-                                        foodItem.quantity -= 1;
-                                      }
-                                  });
-                                },
+                              onPressed: () {
+                                setState(() {
+                                  if (qty > 1) {
+                                    qty -= 1;
+                                    foodItem.quantity -= 1;
+                                  }
+                                });
+                              },
                             ),
                             Container(
                               margin: EdgeInsets.symmetric(horizontal: 15.0),
-                                height: 50,
-                                width: 50,
-                                decoration: BoxDecoration(
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.grey[400],
-                                      blurRadius: 3,
-                                      spreadRadius: 0.5,
-                                    ),
-                                  ],
-                                  shape: BoxShape.circle,
-                                  color: Colors.amberAccent,
-                                ),
-                                child: Center(
-                                  child: Text(
-                                      qty.toString(),
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontFamily: 'Ubuntu',
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    ),
+                              height: 50,
+                              width: 50,
+                              decoration: BoxDecoration(
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey[400],
+                                    blurRadius: 3,
+                                    spreadRadius: 0.5,
+                                  ),
+                                ],
+                                shape: BoxShape.circle,
+                                color: Colors.amberAccent,
+                              ),
+                              child: Center(
+                                child: Text(
+                                  qty.toString(),
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontFamily: 'Ubuntu',
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
                                   ),
                                 ),
+                              ),
                             ),
                             IconButton(
                               icon: Icon(
@@ -226,7 +236,7 @@ class _AddToCartState extends State<AddToCart> {
                                 size: 30,
                               ),
                               color: Colors.red,
-                              onPressed: (){
+                              onPressed: () {
                                 setState(() {
                                   qty += 1;
                                   foodItem.quantity += 1;
@@ -235,32 +245,41 @@ class _AddToCartState extends State<AddToCart> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 30,),
+                        SizedBox(
+                          height: 30,
+                        ),
                         Container(
                           width: MediaQuery.of(context).size.width * 0.9,
                           height: MediaQuery.of(context).size.height * 0.08,
                           child: RaisedButton.icon(
                             color: Colors.amber[400],
-                            onPressed: (){
+                            onPressed: () {
                               setState(() {
-                                if(qty <= 0)
-                                {
-                                  Toast.show('Please add at least one item',context);
-                                }
-                                else{
-                                  cart.addItem(ItemMenus(id: foodItem.id, code: foodItem.code, name: foodItem.name, salePrice: foodItem.salePrice, percentage: foodItem.percentage, photo: foodItem.photo, quantity: foodItem.quantity));
-                                  Toast.show(foodItem.name + ' Added..',context);
-                                  print('Add to Cart: '+cart.listLength());
+                                if (qty <= 0) {
+                                  Toast.show(
+                                      'Please add at least one item', context);
+                                } else {
+                                  cart.addItem(ItemMenus(
+                                      id: foodItem.id,
+                                      code: foodItem.code,
+                                      name: foodItem.name,
+                                      salePrice: foodItem.salePrice,
+                                      percentage: foodItem.percentage,
+                                      photo: foodItem.photo,
+                                      quantity: foodItem.quantity));
+                                  Toast.show(
+                                      foodItem.name + ' Added..', context);
+                                  print('Add to Cart: ' + cart.listLength());
                                 }
                               });
                             },
                             icon: Icon(
-                                Icons.add_shopping_cart,
-                                color: Colors.red,
+                              Icons.add_shopping_cart,
+                              color: Colors.red,
                               size: 20,
                             ),
                             label: Text(
-                                'Add to Cart',
+                              'Add to Cart',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontFamily: 'Ubuntu',
@@ -284,4 +303,3 @@ class _AddToCartState extends State<AddToCart> {
     );
   }
 }
-
