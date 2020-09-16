@@ -28,26 +28,27 @@ class ProjectDatabase {
     String path = join(databaseLocation, Config.DATABASE_NAME);
     _database = await openDatabase(path);
     crntVersion = await _database.getVersion();
+    tablesList = Tables.getTables(_database);
     openDatabase(path,
-        onCreate: onCreate(newVersion),
+        onCreate: onCreate(_database, newVersion),
         onUpgrade: onUpgrade(_database, newVersion, crntVersion),
         onDowngrade: onDowngrade(_database, newVersion, crntVersion));
     return _database;
   }
 
   static bool isNull = true;
-  static List<T.Table> tablesList = Tables.getTables();
+  static List<T.Table> tablesList;
 
-  void create() {
+  void create(Database db) {
     _log.v('CREATING DATABASE');
     tablesList.forEach((table) => table.create());
   }
 
-  void truncate() {
+  void truncate(Database db) {
     tablesList.forEach((table) => table.delete());
   }
 
-  FutureOr<void> onCreate(int version) {
+  FutureOr<void> onCreate(Database db, int version) {
     if (version == 0) {
       tablesList.forEach((table) => table.create());
     }
