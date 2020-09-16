@@ -1,6 +1,7 @@
 import 'package:food_app/testing/columnTypes.dart';
 import 'package:food_app/testing/columns.dart';
 import 'package:food_app/testing/table.dart' as T;
+import 'package:sqflite/sqflite.dart';
 
 class Tables {
   // CREATE A STRING VARIABLE OF THE TABLE NAME AND ADD THE VARIABLE TO
@@ -31,14 +32,14 @@ class Tables {
   static const String _customer = 'customer';
   static const String _orderMaster = 'order_master';
   static const String _orderDetail = 'order_detail';
-  static List<T.Table> getTables() {
+  static List<T.Table> getTables(Database db) {
     List<T.Table> tables = [];
     for (int i = 0; i < tables.length; i++) {
       tables.add(new T.Table(
-        name: Tables.tables[i],
-        columnNames: Columns.columns[i],
-        columnTypes: ColumnTypes.columnTypes[i],
-      ));
+          name: Tables.tables[i],
+          columnNames: Columns.columns[i],
+          columnTypes: ColumnTypes.columnTypes[i],
+          db: db));
     }
     return tables;
   }
