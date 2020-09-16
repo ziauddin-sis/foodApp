@@ -29,7 +29,7 @@ class ProjectDatabase {
     _database = await openDatabase(path);
     crntVersion = await _database.getVersion();
     openDatabase(path,
-        onCreate: onCreate(_database, newVersion),
+        onCreate: onCreate(newVersion),
         onUpgrade: onUpgrade(_database, newVersion, crntVersion),
         onDowngrade: onDowngrade(_database, newVersion, crntVersion));
     return _database;
@@ -38,34 +38,34 @@ class ProjectDatabase {
   static bool isNull = true;
   static List<T.Table> tablesList = Tables.getTables();
 
-  void create(Database db) {
+  void create() {
     _log.v('CREATING DATABASE');
-    tablesList.forEach((table) => table.create(db));
+    tablesList.forEach((table) => table.create());
   }
 
-  void truncate(Database db) {
-    tablesList.forEach((table) => table.delete(db));
+  void truncate() {
+    tablesList.forEach((table) => table.delete());
   }
 
-  FutureOr<void> onCreate(Database db, int version) {
+  FutureOr<void> onCreate(int version) {
     if (version == 0) {
-      tablesList.forEach((table) => table.create(db));
+      tablesList.forEach((table) => table.create());
     }
   }
 
   FutureOr<void> onUpgrade(Database db, int oldVersion, int newVersion) {
     // ADD UPGRADE INSTRUCTIONS HERE
     if (oldVersion < newVersion) {
-      tablesList.forEach((table) => table.drop(db));
-      tablesList.forEach((table) => table.create(db));
+      tablesList.forEach((table) => table.drop());
+      tablesList.forEach((table) => table.create());
     }
   }
 
   FutureOr<void> onDowngrade(Database db, int oldVersion, int newVersion) {
     // ADD DOWNGRAGE INSTRUCTIONS HERE IF ANY
     if (oldVersion > newVersion) {
-      tablesList.forEach((table) => table.drop(db));
-      tablesList.forEach((table) => table.create(db));
+      tablesList.forEach((table) => table.drop());
+      tablesList.forEach((table) => table.create());
     }
   }
 }
